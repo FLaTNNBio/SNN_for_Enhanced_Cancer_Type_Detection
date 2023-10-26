@@ -30,4 +30,4 @@ for filename in os.listdir(input_directory):
         # Elimina il file di testo dopo la conversione
         # os.remove(input_file_path)
 
-print('Trasformazione completata. File CSV creati nella cartella di output.')
+print('Trasformazione completata!')
