@@ -1,8 +1,8 @@
 import os
 import csv
 
-input_directory = '/home/alberto/Scrivania/acc_tcga'
-output_directory = '/home/alberto/Scrivania/acc_tcga'
+input_directory = '/home/alberto/Scrivania/Dataset (buono)/acc_tcga'
+output_directory = '/home/alberto/Scrivania/Dataset (buono)/acc_tcga'
 
 # Assicurati che la cartella di output esista, altrimenti creala
 if not os.path.exists(output_directory):
@@ -22,10 +22,12 @@ for filename in os.listdir(input_directory):
             csv_writer = csv.writer(output_csv, delimiter=';')
             for line in lines:
                 # Qui sto suddividendo la riga in base al tab e scrivendo nel CSV
+                '''
                 if os.path.basename(input_file.name) == 'data_clinical_patient.txt' or os.path.basename(input_file.name) == 'data_mutations.txt':
                     csv_writer.writerow(line.strip().split(','))
                 else:
-                    csv_writer.writerow(line.strip().split('\t'))
+                '''
+                csv_writer.writerow(line.strip().split('\t'))
 
         # Elimina il file di testo dopo la conversione
         # os.remove(input_file_path)

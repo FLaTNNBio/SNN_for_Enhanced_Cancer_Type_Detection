@@ -1,25 +1,24 @@
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
 
-# Carica il CSV
-csv_path = '/home/alberto/Scrivania/acc_tcga/data_rppa.csv'
-df = pd.read_csv(csv_path, sep=';')
+# Carica il CSV in un DataFrame
+df = pd.read_csv('/home/alberto/Scrivania/Dataset/acc_tcga_pan_can_atlas_2018/data_cna.csv', sep=';')
 
-# Specifica le colonne da normalizzare (dalla terza in poi)
-columns_to_normalize = df.columns[1:]
+# Seleziona la seconda riga in poi e la terza colonna in poi
+selected_data = df.iloc[0:, 2:]
 
-# Verifica se ci sono almeno due righe per normalizzare
-if len(df) > 1:
-    # Crea un oggetto MinMaxScaler
-    scaler = MinMaxScaler()
+# Find the minimum and maximum values from both columns
+min_val = selected_data.min().min()
+max_val = selected_data.max().max()
 
-    # Normalizza tutte le colonne dalla terza in poi
-    df[columns_to_normalize] = scaler.fit_transform(df[columns_to_normalize])
+# Normalizzare tutte le colonne
+normalized_columns = (selected_data - min_val) / (max_val - min_val)
 
-    # Salva il CSV normalizzato
-    output_csv_path = '/home/alberto/Scrivania/acc_tcga/data_rppa.csv'
-    df.to_csv(output_csv_path, index=False)
+# Print the DataFrame with normalized columns
+print(normalized_columns)
 
-    print(f'Dati normalizzati e salvati in: {output_csv_path}')
-else:
-    print('Il DataFrame ha meno di due righe. Impossibile normalizzare.')
+# Salva il CSV normalizzato
+df_out = pd.DataFrame(normalized_columns)
+output_csv_path = '/home/alberto/Scrivania/Dataset/acc_tcga_pan_can_atlas_2018/data_cnaa.csv'
+df_out.to_csv(output_csv_path, index=False, sep=';')
+
+print(f'Dati normalizzati e salvati in: {output_csv_path}')
