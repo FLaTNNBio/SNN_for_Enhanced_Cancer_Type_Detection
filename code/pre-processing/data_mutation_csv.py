@@ -48,4 +48,3 @@ directory_principale = "/home/alberto/Scrivania/Dataset"
 
 # Esegui la modifica ricorsiva su tutti i file 'data_mutations.csv'
 modifica_files(directory_principale)
-
