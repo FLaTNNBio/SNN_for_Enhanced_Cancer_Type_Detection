@@ -1,8 +1,8 @@
 import os
 import csv
 
-input_directory = '/home/alberto/Scrivania/Dataset (buono)/acc_tcga'
-output_directory = '/home/alberto/Scrivania/Dataset (buono)/acc_tcga'
+input_directory = '/home/alberto/Scrivania/Dataset (buono)/blca_msk_tcga_2020'
+output_directory = '/home/alberto/Scrivania/Dataset (buono)/blca_msk_tcga_2020'
 
 # Assicurati che la cartella di output esista, altrimenti creala
 if not os.path.exists(output_directory):

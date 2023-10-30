@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carica il CSV in un DataFrame
-df = pd.read_csv('/home/alberto/Scrivania/Dataset/acc_tcga_pan_can_atlas_2018/data_cna.csv', sep=';')
+df = pd.read_csv('/home/alberto/Scrivania/Dataset/sarc_tcga_pub/data_cna.csv', sep=';')
 
 # Seleziona la seconda riga in poi e la terza colonna in poi
 selected_data = df.iloc[0:, 2:]
@@ -18,7 +18,7 @@ print(normalized_columns)
 
 # Salva il CSV normalizzato
 df_out = pd.DataFrame(normalized_columns)
-output_csv_path = '/home/alberto/Scrivania/Dataset/acc_tcga_pan_can_atlas_2018/data_cnaa.csv'
+output_csv_path = '/home/alberto/Scrivania/Dataset/sarc_tcga_pub/data_cnaa.csv'
 df_out.to_csv(output_csv_path, index=False, sep=';')
 
 print(f'Dati normalizzati e salvati in: {output_csv_path}')
