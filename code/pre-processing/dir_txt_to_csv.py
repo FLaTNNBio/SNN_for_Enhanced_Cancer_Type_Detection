@@ -1,35 +1,28 @@
 import os
 import csv
 
-input_directory = '/home/alberto/Scrivania/Dataset (buono)/blca_msk_tcga_2020'
-output_directory = '/home/alberto/Scrivania/Dataset (buono)/blca_msk_tcga_2020'
 
-# Assicurati che la cartella di output esista, altrimenti creala
-if not os.path.exists(output_directory):
-    os.makedirs(output_directory)
+def converti_in_csv(directory):
+    for root, dirs, files in os.walk(directory):
+        for filename in files:
+            if filename.endswith('.txt'):
+                input_file_path = os.path.join(root, filename)
+                output_csv_path = os.path.join(root, f'{os.path.splitext(filename)[0]}.csv')
 
-# Cicla attraverso tutti i file nella cartella di input
-for filename in os.listdir(input_directory):
-    if filename.endswith('.txt'):
-        input_file_path = os.path.join(input_directory, filename)
-        output_csv_path = os.path.join(output_directory, f'{os.path.splitext(filename)[0]}.csv')
+                with open(input_file_path, 'r') as input_file, open(output_csv_path, 'w', newline='') as output_csv:
+                    lines = input_file.readlines()
+                    csv_writer = csv.writer(output_csv, delimiter=';')
+                    for line in lines:
+                        csv_writer.writerow(line.strip().split('\t'))
 
-        with (open(input_file_path, 'r') as input_file, open(output_csv_path, 'w', newline='') as output_csv):
-            # Leggi il file di testo
-            lines = input_file.readlines()
+                # Puoi rimuovere i file di testo dopo la conversione se desideri
+                # os.remove(input_file_path)
 
-            # Scrivi nel file CSV con il punto e virgola come delimitatore
-            csv_writer = csv.writer(output_csv, delimiter=';')
-            for line in lines:
-                # Qui sto suddividendo la riga in base al tab e scrivendo nel CSV
-                '''
-                if os.path.basename(input_file.name) == 'data_clinical_patient.txt' or os.path.basename(input_file.name) == 'data_mutations.txt':
-                    csv_writer.writerow(line.strip().split(','))
-                else:
-                '''
-                csv_writer.writerow(line.strip().split('\t'))
+    print('Trasformazione completata!')
 
-        # Elimina il file di testo dopo la conversione
-        # os.remove(input_file_path)
 
-print('Trasformazione completata!')
+# Specifica la directory principale da cui iniziare la conversione
+directory_principale = '/home/alberto/Scrivania/Dataset_2'
+
+# Chiama la funzione con la directory principale come argomento
+converti_in_csv(directory_principale)

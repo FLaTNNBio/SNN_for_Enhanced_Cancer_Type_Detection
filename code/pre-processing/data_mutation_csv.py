@@ -44,7 +44,7 @@ def modifica_files(directory):
 
 
 # Specifica la directory principale in cui eseguire la modifica ricorsiva
-directory_principale = "/home/alberto/Scrivania/Dataset"
+directory_principale = "/home/alberto/Scrivania/Dataset_2"
 
 # Esegui la modifica ricorsiva su tutti i file 'data_mutations.csv'
 modifica_files(directory_principale)

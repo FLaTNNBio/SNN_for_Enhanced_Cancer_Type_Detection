@@ -55,5 +55,5 @@ def elabora_sottocartelle(directory_principale):
 
 
 # Specifica la directory principale in cui eseguire le operazioni
-directory_principale = "/home/alberto/Scrivania/Dataset"
+directory_principale = "/home/alberto/Scrivania/Dataset_2"
 elabora_sottocartelle(directory_principale)
