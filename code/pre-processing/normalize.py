@@ -3,7 +3,7 @@ import pandas as pd
 # Carica il CSV in un DataFrame
 df = pd.read_csv('/home/alberto/Scrivania/Dataset/sarc_tcga_pub/data_cna.csv', sep=';')
 
-# Seleziona la seconda riga in poi e la terza colonna in poi
+# Seleziona la terza colonna in poi
 selected_data = df.iloc[0:, 2:]
 
 # Find the minimum and maximum values from both columns
