@@ -22,7 +22,7 @@ def converti_in_csv(directory):
 
 
 # Specifica la directory principale da cui iniziare la conversione
-directory_principale = '/home/alberto/Scrivania/Dataset_2'
+directory_principale = '/home/alberto/Scrivania/Dataset (completo)'
 
 # Chiama la funzione con la directory principale come argomento
 converti_in_csv(directory_principale)
