@@ -17,6 +17,7 @@ def concatena_csv(input_csv, output_csv, directory_path):
     for subdirectory in subdirectories:
         subdirectory_path = os.path.join(main_directory, subdirectory)
         sub_file_path = os.path.join(subdirectory_path, 'data_cna.csv')
+        print(subdirectory_path)
 
         # Se trova un file 'data_cna.csv' nella sottodirectory, leggi e verifica le righe
         if os.path.exists(sub_file_path) and os.path.isfile(sub_file_path):
@@ -28,6 +29,7 @@ def concatena_csv(input_csv, output_csv, directory_path):
             # Elimina i duplicati in base alla prima cella e al nome dell'header dalla seconda colonna in poi
             merged_df = merged_df.drop_duplicates(subset=["Hugo_Symbol"] + list(merged_df.columns[1:]))
 
+    print('Fatto')
     # Effettua la fusione (aggregazione) delle righe con lo stesso valore sulla prima colonna
     merged_df = merged_df.sort_values(by="Hugo_Symbol")
     merged_df = merged_df.groupby('Hugo_Symbol', as_index=False).first().fillna(method='ffill')
@@ -39,5 +41,5 @@ def concatena_csv(input_csv, output_csv, directory_path):
 # Esempio di utilizzo
 input_csv = '/home/alberto/Scrivania/acc_tcga/data_cna.csv'
 output_csv = '/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_cna.csv'
-directory_path = '/home/alberto/Scrivania/Dataset_(completo)_2'
+directory_path = '/home/alberto/Scrivania/data'
 concatena_csv(input_csv, output_csv, directory_path)

@@ -4,7 +4,7 @@ import os
 
 def copia_colonne(input_csv, output_csv):
     # Label da cercare
-    label_da_cercare = ["Hugo_Symbol", "Entrez_Gene_Id", "Chromosome", "Start_Position",
+    label_da_cercare = ["Hugo_Symbol", "Tumor_Sample_Barcode", "Chromosome", "Start_Position",
                         "End_Position", "Strand", "Consequence", "Variant_Classification", "Variant_Type"]
 
     # Leggi il CSV in un DataFrame pandas
@@ -44,7 +44,7 @@ def modifica_files(directory):
 
 
 # Specifica la directory principale in cui eseguire la modifica ricorsiva
-directory_principale = "/home/alberto/Scrivania/Dataset_2"
+directory_principale = "/home/alberto/Scrivania/Dataset"
 
 # Esegui la modifica ricorsiva su tutti i file 'data_mutations.csv'
 modifica_files(directory_principale)
