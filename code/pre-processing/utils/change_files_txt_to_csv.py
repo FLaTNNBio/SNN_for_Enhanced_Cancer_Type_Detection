@@ -5,7 +5,7 @@ import csv
 def converti_in_csv(directory):
     for root, dirs, files in os.walk(directory):
         for filename in files:
-            if filename.endswith('.txt'):
+            if filename.endswith('.txt') and 'data_mutations' in filename:
                 input_file_path = os.path.join(root, filename)
                 output_csv_path = os.path.join(root, f'{os.path.splitext(filename)[0]}.csv')
 
@@ -22,7 +22,7 @@ def converti_in_csv(directory):
 
 
 # Specifica la directory principale da cui iniziare la conversione
-directory_principale = '/home/alberto/Scrivania/Dataset'
+directory_principale = '/media/alberto/DATA/Cancer dataset/Dataset'
 
 # Chiama la funzione con la directory principale come argomento
 converti_in_csv(directory_principale)
