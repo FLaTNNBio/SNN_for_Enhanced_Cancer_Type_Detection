@@ -12,12 +12,16 @@ def concatena_csv(input_csv, output_csv, directory_path):
 
     # Inizializza il DataFrame concatenato con il DataFrame di input
     merged_df = input_df.copy()
+    i = 2
 
     # Itera sulle sottodirectory
     for subdirectory in subdirectories:
         subdirectory_path = os.path.join(main_directory, subdirectory)
-        sub_file_path = os.path.join(subdirectory_path, 'data_cna.csv')
+        sub_file_path = os.path.join(subdirectory_path, 'data_mrna_v2_seq_rsem_' + str(i) + '.csv')
         print(subdirectory_path)
+        print(sub_file_path)
+        print("\n")
+        i += 1
 
         # Se trova un file 'data_cna.csv' nella sottodirectory, leggi e verifica le righe
         if os.path.exists(sub_file_path) and os.path.isfile(sub_file_path):
@@ -39,7 +43,7 @@ def concatena_csv(input_csv, output_csv, directory_path):
 
 
 # Esempio di utilizzo
-input_csv = '/home/alberto/Scrivania/acc_tcga/data_cna.csv'
-output_csv = '/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_cna.csv'
-directory_path = '/home/alberto/Scrivania/data'
+input_csv = '/home/alberto/Scrivania/1/data_mrna_v2_seq_rsem_1.csv'
+output_csv = '/home/alberto/Scrivania/output.csv'
+directory_path = '/home/alberto/Scrivania/prova'
 concatena_csv(input_csv, output_csv, directory_path)

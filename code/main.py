@@ -1,16 +1,14 @@
-# This is a sample Python script.
-
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from classification import *
+from siamese_network import *
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+if __name__ == "__main__":
+    dataset_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_mrna/"
+                    "data_mrna_v2_seq_rsem_trasposto_normalizzato_dataPatient.csv")
 
+    encoded_data, n_classes, classes, le, y = pre_processing(dataset_path)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    model, x_support, y_support, x_train, y_train, input_shape, x_test, y_test = (
+        classification_model(encoded_data, n_classes, classes, le, y))
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    siamese_network(model, classes, x_support, y_support, x_train, y_train, input_shape, x_test, y_test)

@@ -1,1 +1,3 @@
 /code/Dataset/*
+/code/model/*.h5
+/code/model/encoded-dataset.csv

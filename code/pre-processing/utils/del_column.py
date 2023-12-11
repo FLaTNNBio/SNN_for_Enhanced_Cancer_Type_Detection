@@ -23,10 +23,10 @@ def main(cartella_principale):
     for cartella, _, files in os.walk(cartella_principale):
         for file in files:
             # Verifica se il file è un CSV di nome 'data_methylation_hm450'
-            if file.startswith('data_mutations') and file.endswith('.csv'):
+            if file.startswith('data_mrna_v2_seq_rsem') and file.endswith('.csv'):
                 csv_path = os.path.join(cartella, file)
                 elimina_colonna(csv_path)
 
 
 # Sostituisci 'percorso_della_cartella_principale' con il percorso effettivo della tua cartella principale
-main('/home/alberto/Scrivania/Dataset (completo)')
+main('/home/alberto/Scrivania/Dataset_clean')
