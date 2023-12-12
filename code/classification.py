@@ -35,9 +35,8 @@ def eval_dnn(x_test, y_test, y_test_ohe, classes, model):
     return results
 
 
-def pre_processing(dataset_path):
-    dataset_df = (
-        pd.read_csv(dataset_path, delimiter=';', low_memory=False))
+def pre_processing(dataset_path, encoded_path, data_encoded):
+    dataset_df = pd.read_csv(dataset_path, delimiter=';', low_memory=False)
 
     dataset_df.head()
     dataset_df = dataset_df[dataset_df['CANCER_TYPE'] != '[Not Available]']
@@ -46,7 +45,12 @@ def pre_processing(dataset_path):
     dataset_df = dataset_df[dataset_df['CANCER_TYPE'].isin(grouped['CANCER_TYPE'].unique())]
 
     category_counts = dataset_df.groupby('CANCER_TYPE').size().reset_index(name='counts')
+    category_counts['percentage'] = (category_counts['counts'] / len(dataset_df) * 100).round(2)
     print(category_counts)
+    print("\n")
+
+    average_percentage = category_counts['percentage'].mean()
+    print(f"Media delle percentuali di campioni per classe: {average_percentage}%")
 
     constant_columns = [col for col in dataset_df.columns if dataset_df[col].nunique() == 1]
     dataset_df = dataset_df.drop(columns=constant_columns)
@@ -67,19 +71,31 @@ def pre_processing(dataset_path):
 
     y = y_df.to_numpy()
 
-    object_cols = list(dataset_df.select_dtypes(include='object'))
-    other_cols = list(dataset_df.select_dtypes(exclude='object'))
-    ohe_encoded_data = pd.get_dummies(dataset_df, columns=object_cols, drop_first=False)
-    encoded_data = pd.concat([ohe_encoded_data, dataset_df[other_cols]], axis=1)
+    if not data_encoded:
+        object_cols = list(dataset_df.select_dtypes(include='object'))
+        other_cols = list(dataset_df.select_dtypes(exclude='object'))
+        ohe_encoded_data = pd.get_dummies(dataset_df, columns=object_cols, drop_first=False)
 
-    encoded_data.to_csv("encoded-dataset.csv", index=False, sep=';')
-    print(np.array(encoded_data).shape)
+        encoded_data = pd.concat([ohe_encoded_data, dataset_df[other_cols]], axis=1)
+
+        encoded_data.to_csv("encoded-dataset.csv", index=False, sep=';')
+        print(np.array(encoded_data).shape)
+    else:
+        encoded_data = pd.read_csv(encoded_path, delimiter=';', low_memory=False)
 
     return encoded_data, n_classes, classes, le, y
 
 
 def classification_model(encoded_data, n_classes, classes, le, y):
-    x_train, x_test, y_train, y_test = train_test_split(np.array(encoded_data), y)
+    # test_size: per default è 0.25 --> 25% test, 75% train
+
+    # random_state: per default è su 'None' cioè il dataset ogni volta viene suddiviso in maniera casuale
+    # e non in maniera deterministica (cioè, se eseguiamo il codice più volte con lo stesso valore di random_state,
+    # otterremo sempre la stessa suddivisione dei dati tra training e testing).
+
+    # stratify=y: indica che si desidera mantenere la stessa distribuzione delle classi nel training e nel testing.
+    x_train, x_test, y_train, y_test = train_test_split(
+        np.array(encoded_data), y,  stratify=y, test_size=0.25, random_state=42)
 
     y_train_ohe = le.fit_transform(y_train)
 

@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def conta_not_available_Columns(output_file):
+def conta_not_available_columns(output_file):
     df = pd.read_csv(output_file, delimiter=';', low_memory=False)
 
     # Inizializza una lista per memorizzare i riferimenti delle colonne con '[Not Avaiable]'
@@ -51,6 +51,3 @@ if __name__ == "__main__":
         print(f"Numero totale di colonne errate nel DataFrame: {len(colonnes_con_valore_mancante)}")
     else:
         print("Nessuna colonna contenente il valore '[Not Available]' è stata trovata.")
-
-
-

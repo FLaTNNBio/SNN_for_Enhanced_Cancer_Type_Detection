@@ -8,8 +8,8 @@ def leggi_csv(cartella):
     for root, dirs, files in os.walk(cartella):
         for file in files:
             if file.endswith("data_mutations.csv"):
-                percorso_file = os.path.join(root, file)
-                df = pd.read_csv(percorso_file, delimiter=';')
+                path_file = os.path.join(root, file)
+                df = pd.read_csv(path_file, delimiter=';')
                 dati.append(df)
     return dati
 

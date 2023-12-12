@@ -40,9 +40,9 @@ def eval_siamese_model(x_support, y_support, x_test, y_test, classes, siamese_mo
     return results
 
 
-def siamese_network(model, classes, x_support, y_support, x_train, y_train, input_shape, x_test, y_test):
-    inputs1 = Input(47599)
-    inputs2 = Input(47599)
+def siamese_network(model, encoded_data, classes, x_support, y_support, x_train, y_train, input_shape, x_test, y_test):
+    inputs1 = Input(np.array(encoded_data).shape[1])
+    inputs2 = Input(np.array(encoded_data).shape[1])
 
     x_train_left, x_train_right, y_train_set = create_couples(x_support, y_support, x_train, y_train)
 
