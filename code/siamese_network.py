@@ -1,12 +1,49 @@
 import numpy as np
 import pandas as pd
-from tensorflow.keras.layers import Lambda
-from tensorflow.keras.models import Sequential
 import tensorflow as tf
 from keras import backend as K
-from tensorflow.keras.layers import Input, Dense, BatchNormalization
+from tensorflow.keras.layers import Input, Dense, Lambda, Dropout
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dropout
+from classification import weighted_categorical_crossentropy, created_model
+
+
+def initialize_bias(shape, name=None, dtype=None):
+    return np.random.normal(loc=0.5, scale=1e-2, size=shape)
+
+
+def last_layer(encoded_l, encoded_r, lyr_name='cos'):
+    if lyr_name == 'L1':
+        # Add a customized layer to compute the absolute difference between the encodings
+        L1_layer = Lambda(lambda tensors: tf.keras.backend.abs(tensors[0] - tensors[1]))
+        L1_distance = L1_layer([encoded_l, encoded_r])
+        add_dens = Dense(512, activation='relu', bias_initializer=initialize_bias)(L1_distance)
+        # drp_lyr = Dropout(0.25)(add_dens)
+        # xx = Dense(128, activation='relu', bias_initializer=initialize_bias)(add_dens)
+        # prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(L1_distance)
+        prediction = Dense(1, activation='sigmoid')(xx)
+
+    elif lyr_name == 'L2':
+
+        # Write L2 here
+        L2_layer = Lambda(lambda tensors: (tensors[0] - tensors[1]) ** 2 / (tensors[0] + tensors[1]))
+        L2_distance = L2_layer([encoded_l, encoded_r])
+        add_dens = Dense(512, activation='relu', bias_initializer=initialize_bias)(L2_distance)
+        drp_lyr = Dropout(0.25)(add_dens)
+        # xx =  Dense(128, activation='relu', bias_initializer=initialize_bias)(drp_lyr)
+        # drp_lyr2 = Dropout(0.25)(xx)
+        # x =  Dense(64, activation='relu', bias_initializer=initialize_bias)(xx)
+        prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(drp_lyr)
+
+    else:
+
+        # Add cosine similarity function
+        cos_layer = Lambda(lambda tensors: K.sum(tensors[0] * tensors[1], axis=-1, keepdims=True) /
+                                           tf.keras.backend.l2_normalize(tensors[0]) * tf.keras.backend.l2_normalize(
+            tensors[1]))
+        cos_distance = cos_layer([encoded_l, encoded_r])
+        prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(cos_distance)
+
+    return prediction
 
 
 def create_couples(x_support, y_support, x_train, y_train):
@@ -25,69 +62,84 @@ def create_couples(x_support, y_support, x_train, y_train):
     return np.array(x_train_left), np.array(x_train_right), np.array(y_train_set)
 
 
-def eval_siamese_model(x_support, y_support, x_test, y_test, classes, siamese_model):
+def eval_siamese_model(loss, accuracy, precision, recall, auc, classes):
     results = pd.DataFrame(columns=["Cancer", "Loss", "Accuracy", "Precision", "Recall", "AUC", "F1 Score"])
     for cancer in classes:
-        indices = np.where(y_test == cancer)
-        x_test_eval = x_test[indices]
-        y_test_eval = y_test[indices]
-        x_test_left, x_test_right, y_test_set = create_couples(x_support, y_support, x_test_eval, y_test_eval)
-        (loss, accuracy, precision, recall, auc) = siamese_model.evaluate([x_test_left, x_test_right], y_test_set)
         f1_score = 2*((precision*recall)/(precision+recall+K.epsilon()))
         new_row = {"Cancer": cancer, "Loss": loss, "Accuracy": accuracy, "Precision": precision,
                    "Recall": recall, "AUC": auc, "F1 Score": f1_score}
-        results = pd.concat([results,pd.DataFrame.from_dict([new_row])])
+        results = pd.concat([results, pd.DataFrame.from_dict([new_row])])
+
     return results
 
 
-def siamese_network(model, encoded_data, classes, x_support, y_support, x_train, y_train, input_shape, x_test, y_test):
-    inputs1 = Input(np.array(encoded_data).shape[1])
-    inputs2 = Input(np.array(encoded_data).shape[1])
-
+def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_train, y_train, input_shape, x_test, y_test):
+    print("Creating couples...")
     x_train_left, x_train_right, y_train_set = create_couples(x_support, y_support, x_train, y_train)
 
-    left_model = Sequential(model.layers[:-1])
-    right_model = Sequential(model.layers[:-1])
+    x_train_left = np.asarray(x_train_left).astype('float32').reshape(-1, x_train[0].shape[0], 1)
+    x_train_right = np.asarray(x_train_right).astype('float32').reshape(-1, x_train[0].shape[0], 1)
+    y_train_set = np.asarray(y_train_set).astype('float32')
 
-    for layer in left_model.layers:
-        layer.trainable = False
-    for layer in right_model.layers:
-        layer.trainable = False
+    left_input = Input(input_shape)
+    right_input = Input(input_shape)
 
-    left_input = Input(shape=input_shape, name='left_input')
-    right_input = Input(shape=input_shape, name='right_input')
+    # Modello per l'input sinistro
+    print("Model left...")
+    model_left_output, model_left_input = created_model(input_shape, n_classes)
+    model_left = Model(inputs=model_left_input, outputs=model_left_output)
+    model_left.layers[1].set_weights(model.layers[1].get_weights())
+    model_left.layers[2].set_weights(model.layers[2].get_weights())
+    model_left.layers[4].set_weights(model.layers[4].get_weights())
 
-    left_output = left_model(left_input)
-    right_output = right_model(right_input)
+    # Modello per l'input destro
+    print("Model right...")
+    model_right_output, model_right_input = created_model(input_shape, n_classes)
+    model_right = Model(inputs=model_right_input, outputs=model_right_output)
+    model_right.layers[1].set_weights(model.layers[1].get_weights())
+    model_right.layers[2].set_weights(model.layers[2].get_weights())
+    model_right.layers[4].set_weights(model.layers[4].get_weights())
 
-    merged_output = Lambda(lambda x: K.sqrt(K.sum(K.square(x[0] - x[1]), axis=1, keepdims=True)))(
-        [left_output, right_output])
+    # Collegamento dei modelli
+    print("Merge...")
+    encoded_l = model_left(left_input)
+    encoded_r = model_right(right_input)
 
-    merged_output = Dense(320, activation="relu")(merged_output)
-    merged_output = Dropout(0.1)(merged_output)
-    merged_output = BatchNormalization()(merged_output)
-    merged_output = Dense(320, activation="relu")(merged_output)
-    merged_output = Dropout(0.1)(merged_output)
-    merged_output = BatchNormalization()(merged_output)
-    merged_output = Dense(320, activation="relu")(merged_output)
-    merged_output = Dropout(0.1)(merged_output)
-    merged_output = BatchNormalization()(merged_output)
+    # Creazione del modello Siamese
+    print("Create siamese model...")
+    siamese_output = last_layer(encoded_l, encoded_r, lyr_name='L2')
+    siamese_model = Model(inputs=[left_input, right_input], outputs=siamese_output)
 
-    final_output = Dense(1, activation='sigmoid')(merged_output)
-
-    siamese_model = Model(inputs=[left_input, right_input], outputs=final_output)
-
-    siamese_model.compile(loss='binary_crossentropy', optimizer="adam",
+    print("Compile in progress...")
+    siamese_model.compile(loss=weighted_categorical_crossentropy(weights),
+                          optimizer="adam",
                           metrics=["accuracy", tf.keras.metrics.Precision(), tf.keras.metrics.Recall(),
                                    tf.keras.metrics.AUC()])
+
+    print("Fit in progress...")
+    x_train_left = np.asarray(x_train_left).astype('float32')
+    x_train_right = np.asarray(x_train_right).astype('float32')
+    y_train_set = np.asarray(y_train_set).astype('float32')
 
     history_s = siamese_model.fit([x_train_left, x_train_right], y=y_train_set, batch_size=64, epochs=40,
                                   validation_split=0.2)
 
     x_test_left, x_test_right, y_test_set = create_couples(x_support, y_support, x_test, y_test)
 
+    print("Evaluate in progress...")
+    x_test_left = np.asarray(x_test_left).astype('float32')
+    x_test_right = np.asarray(x_test_right).astype('float32')
+    y_test_set = np.asarray(y_test_set).astype('float32')
+
+    x_test_left = x_test_left.reshape(x_test_left.shape + (1,))
+    x_test_right = x_test_right.reshape(x_test_right.shape + (1,))
+    y_test_set = y_test_set.reshape(y_test_set.shape + (1,))
+
     (loss, accuracy, precision, recall, auc) = siamese_model.evaluate([x_test_left, x_test_right], y_test_set)
 
-    results = eval_siamese_model(x_support, y_support, x_test, y_test, classes, siamese_model)
+    results = eval_siamese_model(loss, accuracy, precision, recall, auc, classes)
     print("Siamese Results:")
     print(results)
+
+    results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati_testing_siamese_0030.csv",
+                   index=False, sep=';')

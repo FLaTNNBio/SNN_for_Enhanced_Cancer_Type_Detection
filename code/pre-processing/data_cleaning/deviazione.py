@@ -1,23 +1,44 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 input_file = '../../Dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato.csv'
 output_file = '../../Dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0002.csv'
 
-# Leggi il CSV utilizzando pandas, ignorando la prima colonna come indice
-df = pd.read_csv(input_file, delimiter=';', header=None, low_memory=False)
+df = pd.read_csv(input_file, delimiter=';')
 
-# Calcola la deviazione standard per ciascuna colonna a partire dalla seconda colonna
-std_dev = df.iloc[1:, 1:].std()
+# Calcola la deviazione standard per ogni colonna (tranne la prima)
+deviazioni_std = df.iloc[:, 1:].std()
 
-# Seleziona le colonne con deviazione standard maggiore o uguale a 0.8
-selected_columns = std_dev[std_dev >= 0.002].index
-print(selected_columns)
+# Filtra le colonne che superano la deviazione standard desiderata
+colonne_da_salvare = deviazioni_std[deviazioni_std >= 0.00005].index.tolist()
+colonne_da_salvare.insert(0, df.columns[0])  # Aggiungi la prima colonna
 
-# Aggiungi la prima colonna al DataFrame filtrato
-selected_columns = [0] + selected_columns
+# Crea un nuovo DataFrame con le colonne selezionate
+nuovo_df = df[colonne_da_salvare]
 
-# Crea un nuovo DataFrame con solo le colonne selezionate
-df_filtered = df[selected_columns]
+# Salva il nuovo DataFrame in un nuovo file CSV
+nuovo_df.to_csv(output_file, index=False, sep=';')
 
-# Scrivi il DataFrame filtrato nel file di output
-df_filtered.to_csv(output_file, index=False, sep=';')
+print(f"Colonne salvate in {output_file}")
+print(f"Numero finale di colonne: {nuovo_df.shape[1]}")
+
+
+################################################################################
+# Grafico
+plt.scatter(deviazioni_std.index, deviazioni_std)
+plt.title('Deviazione Standard per Colonna')
+plt.xlabel('Colonne')
+plt.ylabel('Deviazione Standard')
+plt.xticks(rotation=90)
+plt.show()
+################################################################################
+
+
+################################################################################
+# Scrivi le deviazioni standard nel file di testo
+deviation_output_file = "../../Dataset/data_mrna/deviation.txt"
+
+with open(deviation_output_file, 'w') as file:
+    for column, deviation in zip(deviazioni_std.index, deviazioni_std.values):
+        file.write(f'{column}: {deviation}\n')
+################################################################################
