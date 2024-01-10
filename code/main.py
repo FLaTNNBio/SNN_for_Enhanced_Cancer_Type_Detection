@@ -7,10 +7,11 @@ if __name__ == "__main__":
     classification = True
     siamese_net = True
 
-    dataset_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/"
+    dataset_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_mrna/"
+                    "deviazione_standard_dataPatient/"
                     "data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0030_dataPatient.csv")
-    encoded_path = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/encoded-dataset_0005.csv"
-    model_path = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model_0005.h5"
+    encoded_path = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/encoded-dataset.csv"
+    model_path = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model.keras"
 
     encoded_data, dataset_df, category_counts, weights, n_classes, classes, le, y = (
         pre_processing(dataset_path, encoded_path, data_encoded))

@@ -97,7 +97,6 @@ def pre_processing(dataset_path, encoded_path, data_encoded):
 
     ratio_cancer = dataset_df.shape[0] / category_counts['counts']
     weights = np.array(ratio_cancer)
-    print(f"\nPesi customizzati:\n{weights}")
 
     return encoded_data, dataset_df, category_counts, weights, n_classes, classes, le, y
 
@@ -108,7 +107,7 @@ def created_model(input_shape, n_classes):
     conv2 = Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', padding='same')(conv1)
     maxpool1 = MaxPooling1D(pool_size=2)(conv2)
 
-    conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='sigmoid', padding='same')(maxpool1)
+    conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='relu', padding='same')(maxpool1)
     maxpool2 = MaxPooling1D(pool_size=2)(conv3)
 
     flatten = Flatten()(maxpool2)
@@ -135,9 +134,9 @@ def classification_model(encoded_data, weights, n_classes, classes, le, y):
 
     input_shape = (x_train[0].shape[0], 1)
 
-    modell, input_layer = created_model(input_shape, n_classes)
+    model_out, input_layer = created_model(input_shape, n_classes)
 
-    model = Model(inputs=input_layer, outputs=modell)
+    model = Model(inputs=input_layer, outputs=model_out)
     model.summary()
     model.compile(
         loss=weighted_categorical_crossentropy(weights),
@@ -155,13 +154,13 @@ def classification_model(encoded_data, weights, n_classes, classes, le, y):
     model.evaluate(x_test, y_test_ohe)
 
     # Salvataggio modello
-    model.save('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model_0005.keras')
+    model.save('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model.keras')
 
     dnn_results = eval_dnn(x_test, y_test, y_test_ohe, classes, model)
     print("DNN Results:")
     print(dnn_results)
 
-    dnn_results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati_testing_0005.csv",
+    dnn_results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati_testing.csv",
                        index=False, sep=';')
 
     return model

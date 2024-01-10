@@ -5,6 +5,7 @@ from keras import backend as K
 from tensorflow.keras.layers import Input, Dense, Lambda, Dropout
 from tensorflow.keras.models import Model
 from classification import weighted_categorical_crossentropy, created_model
+from tensorflow.keras.callbacks import EarlyStopping
 
 
 def initialize_bias(shape, name=None, dtype=None):
@@ -23,7 +24,6 @@ def last_layer(encoded_l, encoded_r, lyr_name='cos'):
         prediction = Dense(1, activation='sigmoid')(xx)
 
     elif lyr_name == 'L2':
-
         # Write L2 here
         L2_layer = Lambda(lambda tensors: (tensors[0] - tensors[1]) ** 2 / (tensors[0] + tensors[1]))
         L2_distance = L2_layer([encoded_l, encoded_r])
@@ -32,16 +32,15 @@ def last_layer(encoded_l, encoded_r, lyr_name='cos'):
         # xx =  Dense(128, activation='relu', bias_initializer=initialize_bias)(drp_lyr)
         # drp_lyr2 = Dropout(0.25)(xx)
         # x =  Dense(64, activation='relu', bias_initializer=initialize_bias)(xx)
-        prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(drp_lyr)
+        prediction = Dense(1, activation='softmax', bias_initializer=initialize_bias)(drp_lyr)
 
     else:
-
         # Add cosine similarity function
         cos_layer = Lambda(lambda tensors: K.sum(tensors[0] * tensors[1], axis=-1, keepdims=True) /
                                            tf.keras.backend.l2_normalize(tensors[0]) * tf.keras.backend.l2_normalize(
             tensors[1]))
         cos_distance = cos_layer([encoded_l, encoded_r])
-        prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(cos_distance)
+        prediction = Dense(1, activation='softmax', bias_initializer=initialize_bias)(cos_distance)
 
     return prediction
 
@@ -65,7 +64,7 @@ def create_couples(x_support, y_support, x_train, y_train):
 def eval_siamese_model(loss, accuracy, precision, recall, auc, classes):
     results = pd.DataFrame(columns=["Cancer", "Loss", "Accuracy", "Precision", "Recall", "AUC", "F1 Score"])
     for cancer in classes:
-        f1_score = 2*((precision*recall)/(precision+recall+K.epsilon()))
+        f1_score = 2 * ((precision * recall) / (precision + recall + K.epsilon()))
         new_row = {"Cancer": cancer, "Loss": loss, "Accuracy": accuracy, "Precision": precision,
                    "Recall": recall, "AUC": auc, "F1 Score": f1_score}
         results = pd.concat([results, pd.DataFrame.from_dict([new_row])])
@@ -73,8 +72,9 @@ def eval_siamese_model(loss, accuracy, precision, recall, auc, classes):
     return results
 
 
-def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_train, y_train, input_shape, x_test, y_test):
-    print("Creating couples...")
+def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_train, y_train,
+                    input_shape, x_test, y_test):
+    print("\nCreating couples...")
     x_train_left, x_train_right, y_train_set = create_couples(x_support, y_support, x_train, y_train)
 
     x_train_left = np.asarray(x_train_left).astype('float32').reshape(-1, x_train[0].shape[0], 1)
@@ -121,8 +121,9 @@ def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_
     x_train_right = np.asarray(x_train_right).astype('float32')
     y_train_set = np.asarray(y_train_set).astype('float32')
 
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=1, restore_best_weights=True)
     history_s = siamese_model.fit([x_train_left, x_train_right], y=y_train_set, batch_size=64, epochs=40,
-                                  validation_split=0.2)
+                                  validation_split=0.2, callbacks=[early_stopping])
 
     x_test_left, x_test_right, y_test_set = create_couples(x_support, y_support, x_test, y_test)
 
@@ -138,8 +139,8 @@ def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_
     (loss, accuracy, precision, recall, auc) = siamese_model.evaluate([x_test_left, x_test_right], y_test_set)
 
     results = eval_siamese_model(loss, accuracy, precision, recall, auc, classes)
-    print("Siamese Results:")
+    print("\nSiamese Results:")
     print(results)
 
-    results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati_testing_siamese_0030.csv",
+    results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati_testing_siamese.csv",
                    index=False, sep=';')
