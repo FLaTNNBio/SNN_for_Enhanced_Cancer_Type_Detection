@@ -30,5 +30,5 @@ if __name__ == "__main__":
         if not classification:
             model = load_model(model_path, custom_objects={'loss': weighted_categorical_crossentropy})
 
-        siamese_network(model, n_classes, classes, weights, x_support, y_support, x_train,
+        siamese_network(model, classes, weights, x_support, y_support, x_train,
                         y_train, input_shape, x_test, y_test)

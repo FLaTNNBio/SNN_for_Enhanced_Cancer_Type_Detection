@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from keras import backend as K
-from tensorflow.keras.layers import Input, Dense, Lambda, Dropout
+from tensorflow.keras.layers import Input, Dense, Lambda, Dropout, Conv1D, Flatten, MaxPooling1D
 from tensorflow.keras.models import Model
-from classification import weighted_categorical_crossentropy, created_model
+from classification import weighted_categorical_crossentropy
 from tensorflow.keras.callbacks import EarlyStopping
 
 
@@ -32,7 +32,7 @@ def last_layer(encoded_l, encoded_r, lyr_name='cos'):
         # xx =  Dense(128, activation='relu', bias_initializer=initialize_bias)(drp_lyr)
         # drp_lyr2 = Dropout(0.25)(xx)
         # x =  Dense(64, activation='relu', bias_initializer=initialize_bias)(xx)
-        prediction = Dense(1, activation='softmax', bias_initializer=initialize_bias)(drp_lyr)
+        prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(drp_lyr)
 
     else:
         # Add cosine similarity function
@@ -40,7 +40,7 @@ def last_layer(encoded_l, encoded_r, lyr_name='cos'):
                                            tf.keras.backend.l2_normalize(tensors[0]) * tf.keras.backend.l2_normalize(
             tensors[1]))
         cos_distance = cos_layer([encoded_l, encoded_r])
-        prediction = Dense(1, activation='softmax', bias_initializer=initialize_bias)(cos_distance)
+        prediction = Dense(1, activation='sigmoid', bias_initializer=initialize_bias)(cos_distance)
 
     return prediction
 
@@ -72,7 +72,21 @@ def eval_siamese_model(loss, accuracy, precision, recall, auc, classes):
     return results
 
 
-def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_train, y_train,
+def created_model_siamese(input_shape):
+    input_layer = Input(shape=input_shape)
+    conv1 = Conv1D(filters=256, kernel_size=50, strides=50, activation='relu', padding='same')(input_layer)
+    conv2 = Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', padding='same')(conv1)
+    maxpool1 = MaxPooling1D(pool_size=2)(conv2)
+
+    conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='relu', padding='same')(maxpool1)
+    maxpool2 = MaxPooling1D(pool_size=2)(conv3)
+
+    output = Flatten()(maxpool2)
+
+    return output, input_layer
+
+
+def siamese_network(model, classes, weights, x_support, y_support, x_train, y_train,
                     input_shape, x_test, y_test):
     print("\nCreating couples...")
     x_train_left, x_train_right, y_train_set = create_couples(x_support, y_support, x_train, y_train)
@@ -86,7 +100,7 @@ def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_
 
     # Modello per l'input sinistro
     print("Model left...")
-    model_left_output, model_left_input = created_model(input_shape, n_classes)
+    model_left_output, model_left_input = created_model_siamese(input_shape)
     model_left = Model(inputs=model_left_input, outputs=model_left_output)
     model_left.layers[1].set_weights(model.layers[1].get_weights())
     model_left.layers[2].set_weights(model.layers[2].get_weights())
@@ -94,7 +108,7 @@ def siamese_network(model, n_classes, classes, weights, x_support, y_support, x_
 
     # Modello per l'input destro
     print("Model right...")
-    model_right_output, model_right_input = created_model(input_shape, n_classes)
+    model_right_output, model_right_input = created_model_siamese(input_shape)
     model_right = Model(inputs=model_right_input, outputs=model_right_output)
     model_right.layers[1].set_weights(model.layers[1].get_weights())
     model_right.layers[2].set_weights(model.layers[2].get_weights())
