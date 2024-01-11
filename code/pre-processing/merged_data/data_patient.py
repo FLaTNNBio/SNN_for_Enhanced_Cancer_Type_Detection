@@ -1,39 +1,39 @@
-import os
 import pandas as pd
+import os
+import glob
 
 
-def concat_and_remove_duplicates(main_folder):
-    # Lista per salvare i frame dei singoli CSV
-    frames = []
+def merge_and_remove_duplicates(input_csv, output_csv, input_directory):
+    # Leggi il primo CSV considerando l'header
+    main_df = pd.read_csv(input_csv, delimiter=';')
 
-    # Scansiona tutte le sottocartelle di main_folder
-    for subdir, _, files in os.walk(main_folder):
-        for file in files:
-            # Verifica se il file è un CSV e ha il nome desiderato
-            if file.endswith(".csv") and file.startswith("data_clinical_patient"):
-                file_path = os.path.join(subdir, file)
-                # Leggi il CSV e aggiungi il frame alla lista
-                df = pd.read_csv(file_path, delimiter=';')
-                frames.append(df)
+    input_csv = 'data_clinical_patient.csv'
 
-    # Concatena tutti i frame in uno solo
-    concatenated_df = pd.concat(frames, ignore_index=True)
+    # Cerca tutti i CSV con lo stesso nome nelle sottocartelle della directory principale
+    pattern = os.path.join(input_directory, '**', os.path.basename(input_csv))
+    additional_csv_files = glob.glob(pattern, recursive=True)
 
-    # Riempie le celle vuote con '[Not Available]'
-    for column in concatenated_df.columns:
-        concatenated_df[column].fillna('[Not Available]', inplace=True)
+    # Leggi gli altri CSV senza considerare l'header, sostituendo i valori vuoti con [Not Available] e concatenali
+    for csv_file in additional_csv_files:
+        if csv_file != input_csv:
+            try:
+                df = pd.read_csv(csv_file, na_values='', keep_default_na=False, delimiter=';')
+                df.fillna('[Not Available]', inplace=True)
 
-    # Elimina i duplicati basandosi sulla colonna 'SAMPLE_ID'
-    deduplicated_df = concatenated_df.drop_duplicates(subset='SAMPLE_ID')
+                # Converte esplicitamente la colonna a un tipo di dato che può ospitare stringhe
+                df['SAMPLE_ID'] = df['SAMPLE_ID'].astype(str)
 
-    # Salva il risultato in un nuovo file CSV
-    deduplicated_df.to_csv(
-        '/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_clinical_patient.csv',
-        index=False, sep=';')
+                main_df = pd.concat([main_df, df], ignore_index=True)
+            except pd.errors.ParserError as e:
+                print(f"Error reading {csv_file}: {e}")
+
+    # Rimuovi righe duplicate basate sulla colonna "SAMPLE_ID"
+    main_df.drop_duplicates(subset='SAMPLE_ID', keep='first', inplace=True)
+
+    # Salva il risultato in un nuovo CSV
+    main_df.to_csv(output_csv, index=False, sep=';')
 
 
-# Specifica la cartella principale dove cercare i file CSV
-main_folder = '/home/alberto/Scrivania/Dataset (completo)'
-
-# Chiama la funzione per eseguire l'operazione
-concat_and_remove_duplicates(main_folder)
+merge_and_remove_duplicates('/home/alberto/Scrivania/acc_tcga/data_clinical_patient.csv',
+                            '/home/alberto/Scrivania/Dataset/data_clinical_patient.csv',
+                            '/home/alberto/Scrivania/Dataset (completo)')

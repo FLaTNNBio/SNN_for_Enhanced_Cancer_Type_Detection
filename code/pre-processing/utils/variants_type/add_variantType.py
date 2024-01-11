@@ -104,16 +104,14 @@ def pre_process_mutations(data_final, dataset, data_mutation):
 
 if __name__ == '__main__':
     print("Lettura primo dataset...")
-    data = pd.read_csv('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_mrna/'
-                       'deviazione_standard_dataPatient/'
-                       'data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0020_dataPatient.csv', delimiter=';')
+    data = pd.read_csv(
+        '/Dataset/data_mrna/deviazione_standard_dataPatient/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0020_dataPatient.csv', delimiter=';')
 
     print("Lettura secondo dataset...")
-    data_mutations = pd.read_csv('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/'
-                                 'data_mutations.csv', delimiter=';')
+    data_mutations = pd.read_csv('/Dataset/data_mutations.csv', delimiter=';')
 
     print("Lettura terzo dataset...")
-    data_cna = pd.read_csv('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_cna.csv',
+    data_cna = pd.read_csv('/Dataset/data_cna.csv',
                            delimiter=';', low_memory=False)
 
     print("FINE Lettura Dataset!")

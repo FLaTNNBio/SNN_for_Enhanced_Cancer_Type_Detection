@@ -1,12 +1,11 @@
 import pandas as pd
 
-# Carica il CSV in un DataFrame
 df = pd.read_csv('/home/alberto/Scrivania/Dataset/sarc_tcga_pub/data_cna.csv', sep=';')
 
 # Seleziona la terza colonna in poi
 selected_data = df.iloc[0:, 2:]
 
-# Find the minimum and maximum values from both columns
+# Trova il valore minimo e massimo da entrambe le colonne
 min_val = selected_data.min().min()
 max_val = selected_data.max().max()
 

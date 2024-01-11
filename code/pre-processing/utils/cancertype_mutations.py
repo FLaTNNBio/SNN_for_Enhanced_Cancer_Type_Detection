@@ -2,7 +2,6 @@ import pandas as pd
 
 
 def aggiungi_colonna_cancer_type(file1, file2, output_file):
-    # Carica i due file CSV
     df1 = pd.read_csv(file1, delimiter=';')
     df2 = pd.read_csv(file2, delimiter=';')
 
@@ -12,12 +11,9 @@ def aggiungi_colonna_cancer_type(file1, file2, output_file):
     # Aggiungi la colonna 'Cancer_Type' al dataframe originale
     df1['CANCER_TYPE'] = df_merged['CANCER_TYPE']
 
-    # Salva il risultato nel nuovo CSV
     df1.to_csv(output_file, index=False, sep=';')
 
 
-# Sostituisci 'file1.csv', 'file2.csv' e 'output.csv' con i tuoi nomi di file
 aggiungi_colonna_cancer_type('/home/musimathicslab/Desktop/Cancer/Dataset/data_mutations.csv',
                              '/home/musimathicslab/Desktop/Cancer/Dataset/data_clinical_patient.csv',
                              '/home/musimathicslab/Desktop/output.csv')
-

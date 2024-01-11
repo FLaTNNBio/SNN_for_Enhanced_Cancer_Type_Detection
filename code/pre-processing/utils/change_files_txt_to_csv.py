@@ -8,7 +8,7 @@ def converti_in_csv(directory):
         for filename in files:
             if filename.endswith('.txt') and 'data_mrna_seq_v2_rsem.txt' in filename:
                 input_file_path = os.path.join(root, filename)
-                output_csv_path = os.path.join(root, f'{os.path.splitext(filename)[0]}_'+ str(i) + '.csv')
+                output_csv_path = os.path.join(root, f'{os.path.splitext(filename)[0]}_' + str(i) + '.csv')
                 i += 1
                 print(output_csv_path)
 
@@ -24,8 +24,6 @@ def converti_in_csv(directory):
     print('Trasformazione completata!')
 
 
-# Specifica la directory principale da cui iniziare la conversione
-directory_principale = '/home/alberto/Scrivania/Dataset'
-
-# Chiama la funzione con la directory principale come argomento
-converti_in_csv(directory_principale)
+if __name__ == '__main__':
+    directory_principale = '/home/alberto/Scrivania/Dataset'
+    converti_in_csv(directory_principale)

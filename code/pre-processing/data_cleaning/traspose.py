@@ -1,10 +1,8 @@
 import pandas as pd
 
 
-# Eliminiamo le prime 9 righe di data_mrna perchè sono [Not Avaiable] per
-# tutti i pazienti
+# Eliminiamo le prime 9 righe di data_mrna se sono [Not Avaiable] per tutti i pazienti
 def elimina_prime_nove_righe(input_file, output_file):
-    # Leggi l'header del CSV utilizzando pandas
     header = pd.read_csv(input_file, delimiter=';', nrows=0, low_memory=False).columns
 
     # Leggi il CSV escludendo le prime 9 righe
@@ -20,13 +18,11 @@ def elimina_prime_nove_righe(input_file, output_file):
 
 
 def trasponi_csv(input_path, output_path):
-    # Carica il file CSV in un DataFrame
     df = pd.read_csv(input_path, delimiter=';', index_col=0, low_memory=False)
 
     # Esegui la trasposizione del DataFrame
     df_trasposto = df.transpose()
 
-    # Salva il DataFrame trasposto in un nuovo file CSV
     df_trasposto.reset_index().to_csv(output_path, index=False, sep=';')
 
     print(f"Trasposizione completata. Il file trasposto è stato salvato in: {output_file_path}")

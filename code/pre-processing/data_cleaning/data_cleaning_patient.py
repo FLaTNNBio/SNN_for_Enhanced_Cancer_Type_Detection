@@ -27,8 +27,8 @@ def cerca_label_e_copia(input_csv):
     return df_risultante
 
 
-def elabora_sottocartelle(directory_principale):
-    for root, dirs, files in os.walk(directory_principale):
+def elabora_sottocartelle(directory):
+    for root, dirs, files in os.walk(directory):
         if 'data_clinical_patient.csv' in files and 'data_clinical_sample.csv' in files:
             input_csv_patient = os.path.join(root, 'data_clinical_patient.csv')
             input_csv_sample = os.path.join(root, 'data_clinical_sample.csv')
@@ -54,6 +54,5 @@ def elabora_sottocartelle(directory_principale):
             print(f"Operazione completata per {root}. Output salvato in {output_path}.\n\n")
 
 
-# Specifica la directory principale in cui eseguire le operazioni
 directory_principale = "/home/alberto/Scrivania/Dataset_2"
 elabora_sottocartelle(directory_principale)

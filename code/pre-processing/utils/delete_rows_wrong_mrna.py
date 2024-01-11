@@ -19,13 +19,11 @@ for numero in range(1, 68):
     # Controlla se il file di input esiste
     if os.path.exists(percorso_file_input):
         print(percorso_file_input)
-        # Leggi il CSV in un DataFrame pandas
         df = pd.read_csv(percorso_file_input, delimiter=';')
 
         # Elimina le righe con valori numerici nella colonna 'Hugo_Symbol'
         df = df[~df['Hugo_Symbol'].astype(str).str.isdigit()]
 
-        # Salva il DataFrame modificato nel file di output
         df.to_csv(percorso_file_output, index=False, sep=';')
 
 print("Operazioni completate con successo. File modificati salvati in", cartella_dati_output)

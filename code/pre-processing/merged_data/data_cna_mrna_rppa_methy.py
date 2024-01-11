@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def concatena_csv(input_csv, output_csv, directory_path):
-    # Leggi il CSV di input
     input_df = pd.read_csv(input_csv, delimiter=';')
 
     # Cerca sottodirectory con lo stesso nome del file 'data_cna.csv' nella directory principale
@@ -38,11 +37,9 @@ def concatena_csv(input_csv, output_csv, directory_path):
     merged_df = merged_df.sort_values(by="Hugo_Symbol")
     merged_df = merged_df.groupby('Hugo_Symbol', as_index=False).first().fillna(method='ffill')
 
-    # Salva il DataFrame concatenato in un nuovo file CSV
     merged_df.to_csv(output_csv, index=False, sep=';')
 
 
-# Esempio di utilizzo
 input_csv = '/home/alberto/Scrivania/1/data_mrna_v2_seq_rsem_1.csv'
 output_csv = '/home/alberto/Scrivania/output.csv'
 directory_path = '/home/alberto/Scrivania/prova'

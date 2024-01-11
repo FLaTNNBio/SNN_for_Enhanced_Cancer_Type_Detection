@@ -29,7 +29,6 @@ def copia_colonne(input_csv, output_csv):
     # Seleziona solo le colonne con le label presenti
     df_selezionato = df[labels_presenti]
 
-    # Scrivi il DataFrame risultante in un nuovo file CSV
     df_selezionato.to_csv(output_csv, index=False, sep=';')
     print(f"Operazione completata per {input_csv}. Output salvato in {output_csv}.")
 
@@ -43,8 +42,6 @@ def modifica_files(directory):
                 copia_colonne(input_path, output_path)
 
 
-# Specifica la directory principale in cui eseguire la modifica ricorsiva
-directory_principale = "/home/alberto/Scrivania/Dataset"
-
-# Esegui la modifica ricorsiva su tutti i file 'data_mutations.csv'
-modifica_files(directory_principale)
+if __name__ == '__main__':
+    directory_principale = "/home/alberto/Scrivania/Dataset"
+    modifica_files(directory_principale)

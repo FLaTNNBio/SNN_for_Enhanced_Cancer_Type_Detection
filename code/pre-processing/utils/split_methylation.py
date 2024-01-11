@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def separa_duplica_valori(file_path):
-    # Carica il file CSV
     df = pd.read_csv(file_path, delimiter=';')
 
     # Elimina le righe con valori vuoti o 'NA' nella prima colonna
@@ -15,7 +14,6 @@ def separa_duplica_valori(file_path):
     # Duplica le righe
     df = df.explode('Hugo_Symbol')
 
-    # Salva il risultato nel file originale
     df.to_csv(file_path, index=False, sep=';')
 
 
@@ -28,5 +26,4 @@ def elabora_cartella(cartella):
                 print(file_path)
 
 
-# Sostituisci 'percorso_della_cartella' con il percorso effettivo della tua cartella principale
 elabora_cartella('/home/musimathicslab/Desktop/Dataset (completo)')

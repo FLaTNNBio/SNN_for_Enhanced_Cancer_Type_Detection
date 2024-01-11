@@ -5,7 +5,6 @@ output_file = '../../Dataset/out.csv'
 
 # Apri il file di input in modalità lettura e il file di output in modalità scrittura
 with open(input_file, 'r') as infile, open(output_file, 'w', newline='') as outfile:
-    # Usa il modulo csv per leggere e scrivere il file CSV
     csv_reader = csv.reader(infile, delimiter=';')
     csv_writer = csv.writer(outfile, delimiter=';')
 

@@ -2,7 +2,7 @@ import os
 import csv
 
 
-def cerca_GRCh37(directory):
+def cerca_gene(directory):
     # Trova tutti i file data_mutations.csv nelle sottocartelle della directory
     files = [os.path.join(root, file) for root, dirs, files in os.walk(directory) for file in files if
              file.endswith('data_mutations.csv')]
@@ -25,5 +25,4 @@ def cerca_GRCh37(directory):
                 print(f"File: {file_path} - Colonna NCBI_Build non trovata")
 
 
-# Sostituisci 'percorso_della_tua_directory' con il percorso della directory in cui cercare i file
-cerca_GRCh37('/media/alberto/DATA/Cancer dataset/Dataset')
+cerca_gene('/media/alberto/DATA/Cancer dataset/Dataset')

@@ -2,7 +2,7 @@ import os
 import csv
 
 
-def cambia_label_header(path_cartella_principale, nuova_label):
+def cambia_label_header(path_cartella_principale, new_label):
     # Trova tutti i file 'data_methylation.csv' nelle sottocartelle
     for cartella, sottocartelle, file in os.walk(path_cartella_principale):
         for nome_file in file:
@@ -16,19 +16,19 @@ def cambia_label_header(path_cartella_principale, nuova_label):
                     righe = list(reader)
 
                     if len(righe) > 0 and len(righe[0]) > 0:
-                        if righe[0][0] != nuova_label:
+                        if righe[0][0] != new_label:
                             # Modifica la label dell'header della prima colonna
-                            righe[0][0] = nuova_label
+                            righe[0][0] = new_label
 
                             # Scrivi le modifiche nel file CSV
                             with open(percorso_file, 'w', newline='') as file_csv_modificato:
                                 writer = csv.writer(file_csv_modificato, delimiter=';')
                                 writer.writerows(righe)
 
-                            # Stampa il percorso del file con la label cambiata
                             print(f"Label cambiata nel file: {percorso_file}")
 
 
-cartella_principale = '/home/alberto/Scrivania/Dataset (completo)'
-nuova_label = 'Hugo_Symbol'
-cambia_label_header(cartella_principale, nuova_label)
+if __name__ == "__main__":
+    cartella_principale = '/home/alberto/Scrivania/Dataset (completo)'
+    nuova_label = 'Hugo_Symbol'
+    cambia_label_header(cartella_principale, nuova_label)
