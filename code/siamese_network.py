@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from keras import backend as K
+from keras.optimizers import Adam
+from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
+import random
 from tensorflow.keras.layers import Input, Dense, Lambda, Dropout, Conv1D, Flatten, MaxPooling1D
 from tensorflow.keras.models import Model
 from classification import weighted_categorical_crossentropy
@@ -86,15 +90,97 @@ def created_model_siamese(input_shape):
     return output, input_layer
 
 
-def siamese_network(model, classes, weights, x_support, y_support, x_train, y_train,
-                    input_shape, x_test, y_test):
-    print("\nCreating couples...")
-    x_train_left, x_train_right, y_train_set = create_couples(x_support, y_support, x_train, y_train)
+def make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, s="test"):
+    """Create pairs of test image, support set for testing N way one-shot learning. """
+    if s == 'val':
+        X = x_val.values
+        class_test_dic = class_val_ind
+    else:
+        X = x_test.values
+        class_test_dic = class_test_ind
 
-    x_train_left = np.asarray(x_train_left).astype('float32').reshape(-1, x_train[0].shape[0], 1)
-    x_train_right = np.asarray(x_train_right).astype('float32').reshape(-1, x_train[0].shape[0], 1)
-    y_train_set = np.asarray(y_train_set).astype('float32')
+    list_N_samples = random.sample(list(set(classes)), N)
+    true_category = list_N_samples[0]
+    out_ind = np.array([random.sample(class_test_dic[j], 2) for j in list_N_samples])
+    indices = out_ind[:, 1]
+    ex1 = out_ind[0, 0]
 
+    # create one column of one sample
+    test_image = np.asarray([X[ex1]] * N).reshape(N, genes_len, 1)
+    support_set = X[indices].reshape(N, genes_len, 1)
+    targets = np.zeros((N,))
+    targets[0] = 1
+    targets, test_image, support_set, list_N_samples = shuffle(targets, test_image, support_set, list_N_samples)
+    pairs = [test_image, support_set]
+
+    return pairs, targets, true_category, list_N_samples
+
+
+def test_oneshot(model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, k, s = "test", verbose = 0):
+    """Test average N way oneshot learning accuracy of a siamese neural net over k one-shot tasks"""
+    n_correct = 0
+    if verbose:
+        print("Evaluating model on {} random {} way one-shot learning tasks ... \n".format(k,N))
+    for i in range(k):
+        inputs, targets, true_category, list_N_samples = make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, s)
+        probs = model.predict(inputs)
+        if np.argmax(probs) == np.argmax(targets):
+            n_correct+=1
+    percent_correct = (100.0 * n_correct / k)
+    if verbose:
+        print("Got an average of {}% {} way one-shot learning accuracy \n".format(percent_correct,N))
+    return percent_correct
+
+
+def get_batch(batch_size, x_train, classes, n_classes, genes_len, cancer_type, md='train'):
+    """
+    Create batch of n pairs, half same class, half different class
+    """
+    x_trainn = x_train.drop('CANCER_TYPE', axis=1)
+    categories = random.sample(list(set(classes)), n_classes)
+
+    class_train_ind = indices_save(cancer_type)
+
+    pairs = [np.zeros((batch_size, genes_len, 1)) for i in range(2)]
+    targets = np.zeros((batch_size,))
+
+    # make one half of it '1's, so 2nd half of batch has same class
+    targets[batch_size // 2:] = 1
+    for i in range(n_classes):
+        category = categories[i]
+        idx_1 = random.sample(class_train_ind[category], 1)[0]
+
+        pairs[0][i, :, :] = x_trainn.values[idx_1].reshape(genes_len, 1)
+        if i >= batch_size // 2:
+            category_2 = category
+            idx_2 = random.sample(class_train_ind[category_2], 1)[0]
+            pairs[1][i, :, :] = x_trainn.values[idx_2].reshape(genes_len, 1)
+
+        else:
+            ind_pop = list(categories).index(category)
+            copy_list = categories.copy()
+            copy_list.pop(ind_pop)
+            category_2 = random.sample(copy_list, 1)[0]
+            idx_2 = random.sample(class_train_ind[category_2], 1)[0]
+            pairs[1][i, :, :] = x_trainn.values[idx_2].reshape(genes_len, 1)
+
+    return pairs, targets
+
+
+def indices_save(dataset):
+    # Creazione di una mappa dove la chiave è il tipo di cancro e
+    # il valore è una lista degli indici delle righe
+    cancer_map = {}
+    for index, row in dataset.iterrows():
+        cancer_type = row['CANCER_TYPE']
+        if cancer_type in cancer_map:
+            cancer_map[cancer_type].append(index)
+        else:
+            cancer_map[cancer_type] = [index]
+    return cancer_map
+
+
+def siamese_network_test(dataset_genes, model, input_shape, genes_len, classes, n_classes, cancer_type):
     left_input = Input(input_shape)
     right_input = Input(input_shape)
 
@@ -125,36 +211,42 @@ def siamese_network(model, classes, weights, x_support, y_support, x_train, y_tr
     siamese_model = Model(inputs=[left_input, right_input], outputs=siamese_output)
 
     print("Compile in progress...")
-    siamese_model.compile(loss=weighted_categorical_crossentropy(weights),
-                          optimizer="adam",
-                          metrics=["accuracy", tf.keras.metrics.Precision(), tf.keras.metrics.Recall(),
-                                   tf.keras.metrics.AUC()])
+    optimizer = Adam(lr=0.000005)
+    siamese_model.compile(loss="binary_crossentropy", optimizer=optimizer)
 
-    print("Fit in progress...")
-    x_train_left = np.asarray(x_train_left).astype('float32')
-    x_train_right = np.asarray(x_train_right).astype('float32')
-    y_train_set = np.asarray(y_train_set).astype('float32')
+    # Hyper parameters
+    evaluate_every = 200  # interval for evaluating on one-shot tasks
+    batch_size = 128  # max 12 for 19
+    n_iter = 20000  # No. of training iterations
+    N_way = 26  # how many classes for testing one-shot tasks
+    n_val = 1000  # how many one-shot tasks to validate on
+    best = -1
 
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=1, restore_best_weights=True)
-    history_s = siamese_model.fit([x_train_left, x_train_right], y=y_train_set, batch_size=64, epochs=40,
-                                  validation_split=0.2, callbacks=[early_stopping])
+    # Pre-Processing dataset for siamese network
+    x_train = dataset_genes
+    x_train["CANCER_TYPE"] = cancer_type
 
-    x_test_left, x_test_right, y_test_set = create_couples(x_support, y_support, x_test, y_test)
+    x_test, x_val = train_test_split(x_train, test_size=0.5)
+    x_test = x_test.reset_index(drop=True)
+    x_val = x_val.reset_index(drop=True)
 
-    print("Evaluate in progress...")
-    x_test_left = np.asarray(x_test_left).astype('float32')
-    x_test_right = np.asarray(x_test_right).astype('float32')
-    y_test_set = np.asarray(y_test_set).astype('float32')
+    class_val_ind = indices_save(x_val)
+    class_test_ind = indices_save(x_test)
 
-    x_test_left = x_test_left.reshape(x_test_left.shape + (1,))
-    x_test_right = x_test_right.reshape(x_test_right.shape + (1,))
-    y_test_set = y_test_set.reshape(y_test_set.shape + (1,))
+    x_test = x_test.drop('CANCER_TYPE', axis=1)
+    x_val = x_val.drop('CANCER_TYPE', axis=1)
 
-    (loss, accuracy, precision, recall, auc) = siamese_model.evaluate([x_test_left, x_test_right], y_test_set)
+    print("Starting training process!")
+    for i in range(1, n_iter + 1):
+        (inputs, targets) = get_batch(batch_size, x_train, classes, n_classes, genes_len, cancer_type)
+        loss = siamese_model.train_on_batch(inputs, targets)
+        if i % evaluate_every == 0:
+            print("\n ------------- \n")
+            print("Train Loss: {0}".format(loss))
+            val_acc = test_oneshot(siamese_model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N_way, n_val, s='val', verbose=True)
+            if val_acc >= best:
+                print("Current best: {0}, previous best: {1}".format(val_acc, best))
+                print(str(i))
+                best = val_acc
 
-    results = eval_siamese_model(loss, accuracy, precision, recall, auc, classes)
-    print("\nSiamese Results:")
-    print(results)
 
-    results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati_testing_siamese.csv",
-                   index=False, sep=';')
