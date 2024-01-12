@@ -8,8 +8,6 @@ from sklearn.utils import shuffle
 import random
 from tensorflow.keras.layers import Input, Dense, Lambda, Dropout, Conv1D, Flatten, MaxPooling1D
 from tensorflow.keras.models import Model
-from classification import weighted_categorical_crossentropy
-from tensorflow.keras.callbacks import EarlyStopping
 
 
 def initialize_bias(shape, name=None, dtype=None):
@@ -99,7 +97,8 @@ def make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_v
         X = x_test.values
         class_test_dic = class_test_ind
 
-    list_N_samples = random.sample(list(set(classes)), N)
+    N = len(class_test_dic.keys())
+    list_N_samples = random.sample(list(class_test_dic.keys()), N)
     true_category = list_N_samples[0]
     out_ind = np.array([random.sample(class_test_dic[j], 2) for j in list_N_samples])
     indices = out_ind[:, 1]
@@ -116,45 +115,49 @@ def make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_v
     return pairs, targets, true_category, list_N_samples
 
 
-def test_oneshot(model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, k, s = "test", verbose = 0):
+def test_oneshot(model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, k, s="test", verbose=0):
     """Test average N way oneshot learning accuracy of a siamese neural net over k one-shot tasks"""
     n_correct = 0
     if verbose:
-        print("Evaluating model on {} random {} way one-shot learning tasks ... \n".format(k,N))
+        print("Evaluating model on {} random {} way one-shot learning tasks ... \n".format(k, N))
     for i in range(k):
-        inputs, targets, true_category, list_N_samples = make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, s)
+        inputs, targets, true_category, list_N_samples = make_oneshot_task(genes_len, x_val, x_test, classes,
+                                                                           class_test_ind, class_val_ind, N, s)
         probs = model.predict(inputs)
         if np.argmax(probs) == np.argmax(targets):
-            n_correct+=1
+            n_correct += 1
     percent_correct = (100.0 * n_correct / k)
     if verbose:
-        print("Got an average of {}% {} way one-shot learning accuracy \n".format(percent_correct,N))
+        print("Got an average of {}% {} way one-shot learning accuracy \n".format(percent_correct, N))
     return percent_correct
 
 
-def get_batch(batch_size, x_train, classes, n_classes, genes_len, cancer_type, md='train'):
+def get_batch(batch_size, x_train, class_train_ind, genes_len, md='train'):
     """
     Create batch of n pairs, half same class, half different class
     """
-    x_trainn = x_train.drop('CANCER_TYPE', axis=1)
-    categories = random.sample(list(set(classes)), n_classes)
-
-    class_train_ind = indices_save(cancer_type)
+    categories = random.sample(list(class_train_ind.keys()), len(class_train_ind.keys()))
+    n_classes = len(class_train_ind.keys())
 
     pairs = [np.zeros((batch_size, genes_len, 1)) for i in range(2)]
     targets = np.zeros((batch_size,))
 
     # make one half of it '1's, so 2nd half of batch has same class
     targets[batch_size // 2:] = 1
-    for i in range(n_classes):
-        category = categories[i]
+    j = 0
+    for i in range(batch_size):
+        if j > n_classes - 1:
+            categories = random.sample(list(class_train_ind.keys()), len(class_train_ind.keys()))
+            j = 0
+
+        category = categories[j]
         idx_1 = random.sample(class_train_ind[category], 1)[0]
 
-        pairs[0][i, :, :] = x_trainn.values[idx_1].reshape(genes_len, 1)
+        pairs[0][i, :, :] = x_train.values[idx_1].reshape(genes_len, 1)
         if i >= batch_size // 2:
             category_2 = category
             idx_2 = random.sample(class_train_ind[category_2], 1)[0]
-            pairs[1][i, :, :] = x_trainn.values[idx_2].reshape(genes_len, 1)
+            pairs[1][i, :, :] = x_train.values[idx_2].reshape(genes_len, 1)
 
         else:
             ind_pop = list(categories).index(category)
@@ -162,8 +165,9 @@ def get_batch(batch_size, x_train, classes, n_classes, genes_len, cancer_type, m
             copy_list.pop(ind_pop)
             category_2 = random.sample(copy_list, 1)[0]
             idx_2 = random.sample(class_train_ind[category_2], 1)[0]
-            pairs[1][i, :, :] = x_trainn.values[idx_2].reshape(genes_len, 1)
+            pairs[1][i, :, :] = x_train.values[idx_2].reshape(genes_len, 1)
 
+        j += 1
     return pairs, targets
 
 
@@ -180,7 +184,7 @@ def indices_save(dataset):
     return cancer_map
 
 
-def siamese_network_test(dataset_genes, model, input_shape, genes_len, classes, n_classes, cancer_type):
+def siamese_network(dataset_genes, model, input_shape, genes_len, classes, n_classes, cancer_type):
     left_input = Input(input_shape)
     right_input = Input(input_shape)
 
@@ -218,35 +222,53 @@ def siamese_network_test(dataset_genes, model, input_shape, genes_len, classes, 
     evaluate_every = 200  # interval for evaluating on one-shot tasks
     batch_size = 128  # max 12 for 19
     n_iter = 20000  # No. of training iterations
-    N_way = 26  # how many classes for testing one-shot tasks
+    N_way = 22  # how many classes for testing one-shot tasks
     n_val = 1000  # how many one-shot tasks to validate on
     best = -1
 
     # Pre-Processing dataset for siamese network
-    x_train = dataset_genes
-    x_train["CANCER_TYPE"] = cancer_type
+    dataset_genes["CANCER_TYPE"] = cancer_type
 
-    x_test, x_val = train_test_split(x_train, test_size=0.5)
+    # Ripetiamo train_test_split finché x_test non contiene almeno due valori 'Nerve Sheath Tumor' in 'CANCER_TYPE'
+    while True:
+        random_state = random.randint(0, 42)
+        x_train, x_test = train_test_split(dataset_genes,
+                                           test_size=0.20, stratify=cancer_type, random_state=random_state)
+
+        # Controllare se ci sono almeno due 'Nerve Sheath Tumor' in x_test
+        if (x_test['CANCER_TYPE'] == 'Nerve Sheath Tumor').sum() >= 2:
+            break
+
+    # x_train, x_val = train_test_split(x_train, test_size=0.15, random_state=42)
+    x_val = pd.DataFrame()
+
+    x_train = x_train.reset_index(drop=True)
     x_test = x_test.reset_index(drop=True)
-    x_val = x_val.reset_index(drop=True)
+    # x_val = x_val.reset_index(drop=True)
 
-    class_val_ind = indices_save(x_val)
+    class_train_ind = indices_save(x_train)
+    # class_val_ind = indices_save(x_val)
+    class_val_ind = None
     class_test_ind = indices_save(x_test)
 
+    x_train = x_train.drop('CANCER_TYPE', axis=1)
     x_test = x_test.drop('CANCER_TYPE', axis=1)
-    x_val = x_val.drop('CANCER_TYPE', axis=1)
+    # x_val = x_val.drop('CANCER_TYPE', axis=1)
 
+    print(len(class_train_ind.keys()))
     print("Starting training process!")
     for i in range(1, n_iter + 1):
-        (inputs, targets) = get_batch(batch_size, x_train, classes, n_classes, genes_len, cancer_type)
+        (inputs, targets) = get_batch(batch_size, x_train, class_train_ind, genes_len)
         loss = siamese_model.train_on_batch(inputs, targets)
+
+        if i % 100 == 0:
+            print(i)
         if i % evaluate_every == 0:
             print("\n ------------- \n")
             print("Train Loss: {0}".format(loss))
-            val_acc = test_oneshot(siamese_model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N_way, n_val, s='val', verbose=True)
+            val_acc = test_oneshot(siamese_model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind,
+                                   N_way, n_val, s='test', verbose=True)
             if val_acc >= best:
                 print("Current best: {0}, previous best: {1}".format(val_acc, best))
                 print(str(i))
                 best = val_acc
-
-

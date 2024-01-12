@@ -154,15 +154,14 @@ def classification_model(encoded_data, weights, n_classes, classes, le, y):
     model.evaluate(x_test, y_test_ohe)
 
     # Salvataggio modello
-    model.save('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model_0030_mutations/'
-               'classification/model.keras')
+    model.save('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model.keras')
 
     dnn_results = eval_dnn(x_test, y_test, y_test_ohe, classes, model)
     print("DNN Results:")
     print(dnn_results)
 
-    dnn_results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model_0030_mutations/"
-                       "classification/risultati_testing.csv",
+    dnn_results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code"
+                       "/risultati_testing.csv",
                        index=False, sep=';')
 
     return model
