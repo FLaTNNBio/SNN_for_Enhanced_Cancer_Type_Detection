@@ -98,7 +98,7 @@ def pre_processing(dataset_path, encoded_path, data_encoded):
     ratio_cancer = dataset_df.shape[0] / category_counts['counts']
     weights = np.array(ratio_cancer)
 
-    return encoded_data, dataset_df, category_counts, weights, n_classes, classes, le, y
+    return encoded_data, dataset_df, weights, n_classes, classes, le, y
 
 
 def created_model(input_shape, n_classes):

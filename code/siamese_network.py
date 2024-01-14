@@ -1,7 +1,7 @@
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 from keras import backend as K
+from keras.models import Sequential
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
@@ -47,57 +47,11 @@ def last_layer(encoded_l, encoded_r, lyr_name='cos'):
     return prediction
 
 
-def create_couples(x_support, y_support, x_train, y_train):
-    x_train_left = []
-    x_train_right = []
-    y_train_set = []
-    for i in range(0, len(x_support)):
-        for j in range(0, len(x_train)):
-            x_train_left.append(x_support[i])
-            x_train_right.append(x_train[j])
-            if y_support[i] == y_train[j]:
-                y_train_set.append(1)
-            else:
-                y_train_set.append(0)
-
-    return np.array(x_train_left), np.array(x_train_right), np.array(y_train_set)
-
-
-def eval_siamese_model(loss, accuracy, precision, recall, auc, classes):
-    results = pd.DataFrame(columns=["Cancer", "Loss", "Accuracy", "Precision", "Recall", "AUC", "F1 Score"])
-    for cancer in classes:
-        f1_score = 2 * ((precision * recall) / (precision + recall + K.epsilon()))
-        new_row = {"Cancer": cancer, "Loss": loss, "Accuracy": accuracy, "Precision": precision,
-                   "Recall": recall, "AUC": auc, "F1 Score": f1_score}
-        results = pd.concat([results, pd.DataFrame.from_dict([new_row])])
-
-    return results
-
-
-def created_model_siamese(input_shape):
-    input_layer = Input(shape=input_shape)
-    conv1 = Conv1D(filters=256, kernel_size=50, strides=50, activation='relu', padding='same')(input_layer)
-    conv2 = Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', padding='same')(conv1)
-    maxpool1 = MaxPooling1D(pool_size=2)(conv2)
-
-    conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='relu', padding='same')(maxpool1)
-    maxpool2 = MaxPooling1D(pool_size=2)(conv3)
-
-    output = Flatten()(maxpool2)
-
-    return output, input_layer
-
-
-def make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, s="test"):
+def make_oneshot_task(genes_len, x_test, class_test_ind, N):
     """Create pairs of test image, support set for testing N way one-shot learning. """
-    if s == 'val':
-        X = x_val.values
-        class_test_dic = class_val_ind
-    else:
-        X = x_test.values
-        class_test_dic = class_test_ind
+    X = x_test.values
+    class_test_dic = class_test_ind
 
-    N = len(class_test_dic.keys())
     list_N_samples = random.sample(list(class_test_dic.keys()), N)
     true_category = list_N_samples[0]
     out_ind = np.array([random.sample(class_test_dic[j], 2) for j in list_N_samples])
@@ -115,14 +69,13 @@ def make_oneshot_task(genes_len, x_val, x_test, classes, class_test_ind, class_v
     return pairs, targets, true_category, list_N_samples
 
 
-def test_oneshot(model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind, N, k, s="test", verbose=0):
+def test_oneshot(model, genes_len, x_test, class_test_ind, N, k, verbose=0):
     """Test average N way oneshot learning accuracy of a siamese neural net over k one-shot tasks"""
     n_correct = 0
     if verbose:
         print("Evaluating model on {} random {} way one-shot learning tasks ... \n".format(k, N))
     for i in range(k):
-        inputs, targets, true_category, list_N_samples = make_oneshot_task(genes_len, x_val, x_test, classes,
-                                                                           class_test_ind, class_val_ind, N, s)
+        inputs, targets, true_category, list_N_samples = make_oneshot_task(genes_len, x_test, class_test_ind, N)
         probs = model.predict(inputs)
         if np.argmax(probs) == np.argmax(targets):
             n_correct += 1
@@ -175,8 +128,7 @@ def indices_save(dataset):
     # Creazione di una mappa dove la chiave è il tipo di cancro e
     # il valore è una lista degli indici delle righe
     cancer_map = {}
-    for index, row in dataset.iterrows():
-        cancer_type = row['CANCER_TYPE']
+    for index, cancer_type in dataset['CANCER_TYPE'].items():
         if cancer_type in cancer_map:
             cancer_map[cancer_type].append(index)
         else:
@@ -184,47 +136,40 @@ def indices_save(dataset):
     return cancer_map
 
 
-def siamese_network(dataset_genes, model, input_shape, genes_len, classes, n_classes, cancer_type):
+def get_siamese_model(input_shape, model):
+    # Define the tensors for the two input images
     left_input = Input(input_shape)
     right_input = Input(input_shape)
 
-    # Modello per l'input sinistro
-    print("Model left...")
-    model_left_output, model_left_input = created_model_siamese(input_shape)
-    model_left = Model(inputs=model_left_input, outputs=model_left_output)
-    model_left.layers[1].set_weights(model.layers[1].get_weights())
-    model_left.layers[2].set_weights(model.layers[2].get_weights())
-    model_left.layers[4].set_weights(model.layers[4].get_weights())
+    # Convolutional Neural Network
+    siamese_model = Sequential()
 
-    # Modello per l'input destro
-    print("Model right...")
-    model_right_output, model_right_input = created_model_siamese(input_shape)
-    model_right = Model(inputs=model_right_input, outputs=model_right_output)
-    model_right.layers[1].set_weights(model.layers[1].get_weights())
-    model_right.layers[2].set_weights(model.layers[2].get_weights())
-    model_right.layers[4].set_weights(model.layers[4].get_weights())
+    siamese_model.add(
+        Conv1D(filters=256, kernel_size=50, strides=50, activation='relu', weights=model.layers[1].get_weights(),
+               padding='same', input_shape=input_shape))
+    siamese_model.add(
+        Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', weights=model.layers[2].get_weights(),
+               padding='same'))
+    siamese_model.add(MaxPooling1D(pool_size=2))
+    siamese_model.add(Conv1D(filters=128, kernel_size=5, strides=1, activation='sigmoid',
+                             weights=model.layers[4].get_weights(), padding='same'))
+    siamese_model.add(MaxPooling1D(pool_size=2))
+    siamese_model.add(Flatten())
 
-    # Collegamento dei modelli
-    print("Merge...")
-    encoded_l = model_left(left_input)
-    encoded_r = model_right(right_input)
+    encoded_l = siamese_model(left_input)
+    encoded_r = siamese_model(right_input)
 
-    # Creazione del modello Siamese
-    print("Create siamese model...")
-    siamese_output = last_layer(encoded_l, encoded_r, lyr_name='L2')
-    siamese_model = Model(inputs=[left_input, right_input], outputs=siamese_output)
+    # Connect the inputs with the outputs
+    siamese_net = Model(inputs=[left_input, right_input],
+                        outputs=last_layer(encoded_l, encoded_r, lyr_name='L2'))  # prediction and cosine_similarity
+    return siamese_net
 
-    print("Compile in progress...")
+
+def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
+    siamese_model = get_siamese_model(input_shape, model)
+
     optimizer = Adam(lr=0.000005)
     siamese_model.compile(loss="binary_crossentropy", optimizer=optimizer)
-
-    # Hyper parameters
-    evaluate_every = 200  # interval for evaluating on one-shot tasks
-    batch_size = 128  # max 12 for 19
-    n_iter = 20000  # No. of training iterations
-    N_way = 22  # how many classes for testing one-shot tasks
-    n_val = 1000  # how many one-shot tasks to validate on
-    best = -1
 
     # Pre-Processing dataset for siamese network
     dataset_genes["CANCER_TYPE"] = cancer_type
@@ -239,36 +184,43 @@ def siamese_network(dataset_genes, model, input_shape, genes_len, classes, n_cla
         if (x_test['CANCER_TYPE'] == 'Nerve Sheath Tumor').sum() >= 2:
             break
 
-    # x_train, x_val = train_test_split(x_train, test_size=0.15, random_state=42)
-    x_val = pd.DataFrame()
-
     x_train = x_train.reset_index(drop=True)
     x_test = x_test.reset_index(drop=True)
-    # x_val = x_val.reset_index(drop=True)
 
     class_train_ind = indices_save(x_train)
-    # class_val_ind = indices_save(x_val)
-    class_val_ind = None
     class_test_ind = indices_save(x_test)
 
     x_train = x_train.drop('CANCER_TYPE', axis=1)
     x_test = x_test.drop('CANCER_TYPE', axis=1)
-    # x_val = x_val.drop('CANCER_TYPE', axis=1)
 
-    print(len(class_train_ind.keys()))
-    print("Starting training process!")
+    # Hyper parameters
+    evaluate_every = 200  # interval for evaluating on one-shot tasks
+    batch_size = 128  # max 12 for 19
+    n_iter = 20000  # No. of training iterations
+    N_way = len(class_test_ind.keys())  # how many classes for testing one-shot tasks
+    n_val = 1000  # how many one-shot tasks to validate on
+    best = -1
+
+    print(f"\nNumero di classi (Tumori) train: {len(class_train_ind.keys())}")
+    print(f"Numero di classi (Tumori) test: {len(class_test_ind.keys())}")
+
+    print("\nStarting training process!")
     for i in range(1, n_iter + 1):
         (inputs, targets) = get_batch(batch_size, x_train, class_train_ind, genes_len)
         loss = siamese_model.train_on_batch(inputs, targets)
 
         if i % 100 == 0:
             print(i)
+
         if i % evaluate_every == 0:
             print("\n ------------- \n")
             print("Train Loss: {0}".format(loss))
-            val_acc = test_oneshot(siamese_model, genes_len, x_val, x_test, classes, class_test_ind, class_val_ind,
-                                   N_way, n_val, s='test', verbose=True)
+            val_acc = test_oneshot(siamese_model, genes_len, x_test, class_test_ind,
+                                   N_way, n_val, verbose=True)
             if val_acc >= best:
                 print("Current best: {0}, previous best: {1}".format(val_acc, best))
                 print(str(i))
                 best = val_acc
+
+                with open("siamese.txt", 'a') as file:
+                    file.write("Epoca: {0}, Current best: {1}, previous best: {2}".format(str(i), val_acc, best) + '\n')
