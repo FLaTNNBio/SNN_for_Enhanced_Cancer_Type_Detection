@@ -153,7 +153,7 @@ def classification_model(encoded_data, weights, n_classes, classes, le, y):
 
     model.evaluate(x_test, y_test_ohe)
 
-    # Salvataggio modello
+    # Save model
     model.save('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model.keras')
 
     dnn_results = eval_dnn(x_test, y_test, y_test_ohe, classes, model)
