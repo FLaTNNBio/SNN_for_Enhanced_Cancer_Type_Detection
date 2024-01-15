@@ -1,3 +1,4 @@
 /code/Dataset/*
-/code/model/*.h5
-/code/model/encoded-dataset.csv
+/code/*.keras
+/code/*.csv
+/code/__pycache__/*
