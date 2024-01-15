@@ -81,10 +81,11 @@ Epoca: 19200, Current best: 86.2, previous best: 86.2
 
 Iperparametri (Dataset 0030)
 - evaluate_every = 200  # interval for evaluating on one-shot tasks
-- batch_size = 26  # max 12 for 19
+- batch_size = 128  # max 12 for 19
 - n_iter = 100000  # No. of training iterations
 - n_val = 1000  # how many one-shot tasks to validate on
 - best = -1
+
 Epoca: 200, Current best: 34.3, previous best: 34.3
 Epoca: 400, Current best: 43.9, previous best: 43.9
 Epoca: 600, Current best: 45.1, previous best: 45.1
@@ -111,3 +112,30 @@ Epoca: 17000, Current best: 85.6, previous best: 85.6
 Epoca: 17400, Current best: 86.4, previous best: 86.4
 Epoca: 21400, Current best: 86.5, previous best: 86.5
 Epoca: 23000, Current best: 87.0, previous best: 87.0
+#########################################################################
+
+Iperparametri (Dataset 0030)
+- evaluate_every = 200  # interval for evaluating on one-shot tasks
+- batch_size = 256  # max 12 for 19
+- n_iter = 40000  # No. of training iterations
+- n_val = 1000  # how many one-shot tasks to validate on
+- best = -1
+
+Epoca: 200, Current best: 28.3, previous best: 28.3
+Epoca: 400, Current best: 47.5, previous best: 47.5
+Epoca: 600, Current best: 55.7, previous best: 55.7
+Epoca: 800, Current best: 63.2, previous best: 63.2
+Epoca: 1000, Current best: 65.6, previous best: 65.6
+Epoca: 1200, Current best: 70.9, previous best: 70.9
+Epoca: 1600, Current best: 73.7, previous best: 73.7
+Epoca: 1800, Current best: 74.6, previous best: 74.6
+Epoca: 2000, Current best: 77.8, previous best: 77.8
+Epoca: 2200, Current best: 78.7, previous best: 78.7
+Epoca: 3000, Current best: 78.7, previous best: 78.7
+Epoca: 3400, Current best: 80.5, previous best: 80.5
+Epoca: 3600, Current best: 82.3, previous best: 82.3
+Epoca: 3800, Current best: 82.5, previous best: 82.5
+Epoca: 4400, Current best: 83.9, previous best: 83.9
+Epoca: 6400, Current best: 85.1, previous best: 85.1
+Epoca: 9200, Current best: 86.1, previous best: 86.1
+Epoca: 9800, Current best: 86.4, previous best: 86.4
