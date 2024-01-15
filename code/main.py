@@ -4,8 +4,8 @@ from tensorflow.keras.models import load_model
 
 
 if __name__ == "__main__":
-    data_encoded = True
-    classification = False
+    data_encoded = False
+    classification = True
     siamese_net = True
 
     dataset_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_mrna/"
@@ -28,7 +28,6 @@ if __name__ == "__main__":
 
         genes_len = dataset_df.shape[1]
         input_shape = (genes_len, 1)
-        print(genes_len)
 
         cancer_type = pd.DataFrame(y, columns=['CANCER_TYPE'])
         siamese_network(dataset_df, model, input_shape, genes_len, cancer_type)

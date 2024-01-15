@@ -161,12 +161,14 @@ def get_siamese_model(input_shape, model):
 
     # Connect the inputs with the outputs
     siamese_net = Model(inputs=[left_input, right_input],
-                        outputs=last_layer(encoded_l, encoded_r, lyr_name='L2'))  # prediction and cosine_similarity
+                        outputs=last_layer(encoded_l, encoded_r, lyr_name='L2'), # prediction and cosine_similarity
+                        name="siamese-network")
     return siamese_net
 
 
 def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
     siamese_model = get_siamese_model(input_shape, model)
+    siamese_model.summary()
 
     optimizer = Adam(lr=0.000005)
     siamese_model.compile(loss="binary_crossentropy", optimizer=optimizer)
@@ -203,6 +205,7 @@ def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
 
     print(f"\nNumero di classi (Tumori) train: {len(class_train_ind.keys())}")
     print(f"Numero di classi (Tumori) test: {len(class_test_ind.keys())}")
+    print(f"Numero di geni totali: {genes_len}")
 
     print("\nStarting training process!")
     for i in range(1, n_iter + 1):

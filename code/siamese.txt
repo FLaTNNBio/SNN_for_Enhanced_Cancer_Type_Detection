@@ -117,7 +117,7 @@ Epoca: 23000, Current best: 87.0, previous best: 87.0
 Iperparametri (Dataset 0030)
 - evaluate_every = 200  # interval for evaluating on one-shot tasks
 - batch_size = 256  # max 12 for 19
-- n_iter = 40000  # No. of training iterations
+- n_iter = 20000  # No. of training iterations
 - n_val = 1000  # how many one-shot tasks to validate on
 - best = -1
 

@@ -136,7 +136,7 @@ def classification_model(encoded_data, weights, n_classes, classes, le, y):
 
     model_out, input_layer = created_model(input_shape, n_classes)
 
-    model = Model(inputs=input_layer, outputs=model_out)
+    model = Model(inputs=input_layer, outputs=model_out, name="classification")
     model.summary()
     model.compile(
         loss=weighted_categorical_crossentropy(weights),
