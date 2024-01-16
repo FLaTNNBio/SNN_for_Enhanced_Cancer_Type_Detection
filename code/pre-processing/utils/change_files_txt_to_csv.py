@@ -25,5 +25,5 @@ def converti_in_csv(directory):
 
 
 if __name__ == '__main__':
-    directory_principale = '/home/alberto/Scrivania/Dataset'
+    directory_principale = '/home/alberto/Scrivania/dataset'
     converti_in_csv(directory_principale)

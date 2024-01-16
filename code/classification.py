@@ -46,7 +46,23 @@ def weighted_categorical_crossentropy(weights):
     return loss
 
 
-def pre_processing(dataset_path, encoded_path, data_encoded):
+def del_genes_constant(df):
+    # Creare un set di geni di base (senza suffissi)
+    base_genes = set(gene.split('_')[0] for gene in df)
+
+    # Filtrare per mantenere solo i geni che hanno tutte e quattro le varianti
+    filtered_genes = [gene for gene in base_genes if
+                      all(any(gene_variant == gene + suffix for gene_variant in df)
+                          for suffix in ["_DEL", "_SNP", "_CNA", "_INS"])]
+
+    filtered_genes_complete = []
+    for gene in filtered_genes:
+        filtered_genes_complete.extend([gene + suffix for suffix in ["_DEL", "_SNP", "_CNA", "_INS"]])
+
+    return filtered_genes_complete, list(filtered_genes)
+
+
+def pre_processing(dataset_path, encoded_path, data_encoded, only_variant):
     dataset_df = pd.read_csv(dataset_path, delimiter=';', low_memory=False)
     dataset_df = dataset_df[dataset_df['CANCER_TYPE'] != '[Not Available]']
 
@@ -65,12 +81,22 @@ def pre_processing(dataset_path, encoded_path, data_encoded):
     print(f"Media delle percentuali di campioni per classe: {average_percentage} %")
 
     constant_columns = [col for col in dataset_df.columns if dataset_df[col].nunique() == 1]
-    dataset_df = dataset_df.drop(columns=constant_columns)
+    constant_columns_genes = [element for element in constant_columns if element != "SOMATIC_STATUS"]
 
-    ############################################################################################
+    result, genes = del_genes_constant(constant_columns_genes)
+    if len(result) > 0:
+        if only_variant:
+            dataset_df = dataset_df.drop(columns=result)
+        else:
+            columns = result + genes
+            dataset_df = dataset_df.drop(columns=columns)
+    else:
+        dataset_df = dataset_df.drop(columns=constant_columns_genes)
+
+    ###############################################################################################
     dataset_df = dataset_df.drop(columns=["SEX", "SAMPLE_TYPE", "ONCOTREE_CODE", "OS_STATUS",
-                                          "AJCC_PATHOLOGIC_TUMOR_STAGE", "AGE"])
-    ############################################################################################
+                                          "AJCC_PATHOLOGIC_TUMOR_STAGE", "AGE", "SOMATIC_STATUS"])
+    ###############################################################################################
 
     classes = pd.unique(dataset_df["CANCER_TYPE"])
     n_classes = len(pd.unique(classes))
@@ -116,7 +142,7 @@ def created_model(input_shape, n_classes):
     return output, input_layer
 
 
-def classification_model(encoded_data, weights, n_classes, classes, le, y):
+def classification_model(model_path, risultati_classification, encoded_data, weights, n_classes, classes, le, y):
     # test_size: per default è 0.25 --> 25% test, 75% train
 
     # random_state: per default è su 'None' cioè il dataset ogni volta viene suddiviso in maniera casuale
@@ -154,14 +180,12 @@ def classification_model(encoded_data, weights, n_classes, classes, le, y):
     model.evaluate(x_test, y_test_ohe)
 
     # Save model
-    model.save('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/model.keras')
+    model.save(model_path + 'model.keras')
 
     dnn_results = eval_dnn(x_test, y_test, y_test_ohe, classes, model)
     print("DNN Results:")
     print(dnn_results)
 
-    dnn_results.to_csv("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code"
-                       "/risultati_testing.csv",
-                       index=False, sep=';')
+    dnn_results.to_csv(risultati_classification, index=False, sep=';')
 
     return model

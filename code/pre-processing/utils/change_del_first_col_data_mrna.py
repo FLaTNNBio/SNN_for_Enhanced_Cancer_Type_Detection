@@ -1,7 +1,7 @@
 import csv
 
-input_file = '../../Dataset/data_mrna_seq_v2_rsem.csv'
-output_file = '../../Dataset/out.csv'
+input_file = '../../dataset/data_mrna_seq_v2_rsem.csv'
+output_file = '../../dataset/out.csv'
 
 # Apri il file di input in modalità lettura e il file di output in modalità scrittura
 with open(input_file, 'r') as infile, open(output_file, 'w', newline='') as outfile:

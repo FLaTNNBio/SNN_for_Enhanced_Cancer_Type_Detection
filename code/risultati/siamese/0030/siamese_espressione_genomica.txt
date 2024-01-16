@@ -1,0 +1,7 @@
+Iperparametri (Dataset 0030 --> 166 geni --> 26 classi --> 9757 pazienti)
+- evaluate_every = 200  # interval for evaluating on one-shot tasks
+- batch_size = 26  # max 12 for 19
+- n_iter = 100000  # No. of training iterations
+- n_val = 1000  # how many one-shot tasks to validate on
+- best = -1
+

@@ -43,5 +43,5 @@ def modifica_files(directory):
 
 
 if __name__ == '__main__':
-    directory_principale = "/home/alberto/Scrivania/Dataset"
+    directory_principale = "/home/alberto/Scrivania/dataset"
     modifica_files(directory_principale)

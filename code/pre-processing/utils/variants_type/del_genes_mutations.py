@@ -11,12 +11,12 @@ def drop_genes_mutations(data):
 if __name__ == "__main__":
     print("Lettura dataset...")
     dataset = pd.read_csv(
-        '/Dataset/data_mrna_variants/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0020_dataPatient_mutations_and_variants.csv',
+        '/dataset/data_mrna_variants/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0020_dataPatient_mutations_and_variants.csv',
         delimiter=';')
 
-    print("FINE Lettura Dataset!")
+    print("FINE Lettura dataset!")
 
     data_final = drop_genes_mutations(dataset)
-    data_final.to_csv('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_mrna_variants/'
+    data_final.to_csv('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/dataset/data_mrna_variants/'
                       'data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0020_dataPatient_only_variants.csv',
                       index=False, sep=';')

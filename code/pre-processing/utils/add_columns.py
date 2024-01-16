@@ -18,7 +18,7 @@ def merge_csv(input_csv1, input_csv2, output_csv):
 
 
 # Esempio di utilizzo
-merge_csv('/home/musimathicslab/Desktop/Cancer/Dataset/data_clinical_patient.csv',
-          '/home/musimathicslab/Desktop/Cancer/Dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0005.csv',
-          '/home/musimathicslab/Desktop/Cancer/Dataset/data_mrnadata_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0005_dataPatient.csv')
+merge_csv('/home/musimathicslab/Desktop/Cancer/dataset/data_clinical_patient.csv',
+          '/home/musimathicslab/Desktop/Cancer/dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0005.csv',
+          '/home/musimathicslab/Desktop/Cancer/dataset/data_mrnadata_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0005_dataPatient.csv')
 

@@ -29,6 +29,6 @@ def cambia_label_header(path_cartella_principale, new_label):
 
 
 if __name__ == "__main__":
-    cartella_principale = '/home/alberto/Scrivania/Dataset (completo)'
+    cartella_principale = '/home/alberto/Scrivania/dataset (completo)'
     nuova_label = 'Hugo_Symbol'
     cambia_label_header(cartella_principale, nuova_label)

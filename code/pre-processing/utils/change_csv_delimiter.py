@@ -1,7 +1,7 @@
 import csv
 
-input_file = '/home/alberto/Scrivania/Dataset/blca_tcga/data_clinical_patient.csv'
-output_file = '/home/alberto/Scrivania/Dataset/blca_tcga/data_clinical_patient.csv'
+input_file = '/home/alberto/Scrivania/dataset/blca_tcga/data_clinical_patient.csv'
+output_file = '/home/alberto/Scrivania/dataset/blca_tcga/data_clinical_patient.csv'
 
 with open(input_file, 'r', newline='') as csvfile:
     reader = csv.reader(csvfile, delimiter='\t')

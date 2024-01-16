@@ -14,10 +14,10 @@ def leggi_csv(cartella):
     return dati
 
 
-cartella_principale = "/home/alberto/Scrivania/Dataset (completo)"
+cartella_principale = "/home/alberto/Scrivania/dataset (completo)"
 dati_concatenati = pd.concat(leggi_csv(cartella_principale), ignore_index=True)
 dati_senza_duplicati = dati_concatenati.drop_duplicates()
 
 # Salva il dataframe in un nuovo file CSV
-percorso_output = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/Dataset/data_mutations.csv"
+percorso_output = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/dataset/data_mutations.csv"
 dati_senza_duplicati.to_csv(percorso_output, index=False, sep=';')

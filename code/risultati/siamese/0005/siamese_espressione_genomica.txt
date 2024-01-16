@@ -1,0 +1,49 @@
+Iperparametri (Dataset 0005 --> 1349 geni --> 26 classi)
+
+- evaluate_every = 200  # interval for evaluating on one-shot tasks
+- batch_size = 26  # max 12 for 19
+- n_iter = 100000  # No. of training iterations
+- n_val = 1000  # how many one-shot tasks to validate on
+- best = -1
+
+Epoca: 200, Current best: 54.5, previous best: 54.5
+Epoca: 400, Current best: 60.6, previous best: 60.6
+Epoca: 800, Current best: 61.1, previous best: 61.1
+Epoca: 1200, Current best: 62.4, previous best: 62.4
+Epoca: 1400, Current best: 63.0, previous best: 63.0
+Epoca: 2000, Current best: 69.4, previous best: 69.4
+Epoca: 2200, Current best: 69.6, previous best: 69.6
+Epoca: 2400, Current best: 70.4, previous best: 70.4
+Epoca: 3000, Current best: 71.4, previous best: 71.4
+Epoca: 3200, Current best: 73.4, previous best: 73.4
+Epoca: 3400, Current best: 74.0, previous best: 74.0
+Epoca: 4000, Current best: 76.2, previous best: 76.2
+Epoca: 5200, Current best: 76.3, previous best: 76.3
+Epoca: 5400, Current best: 76.5, previous best: 76.5
+Epoca: 5600, Current best: 79.2, previous best: 79.2
+Epoca: 6400, Current best: 80.2, previous best: 80.2
+Epoca: 7000, Current best: 81.0, previous best: 81.0
+Epoca: 8600, Current best: 81.5, previous best: 81.5
+Epoca: 9000, Current best: 81.6, previous best: 81.6
+Epoca: 9800, Current best: 82.7, previous best: 82.7
+Epoca: 10000, Current best: 85.0, previous best: 85.0
+Epoca: 14400, Current best: 85.4, previous best: 85.4
+Epoca: 15600, Current best: 85.4, previous best: 85.4
+Epoca: 16600, Current best: 85.9, previous best: 85.9
+Epoca: 18200, Current best: 86.8, previous best: 86.8
+Epoca: 22200, Current best: 87.4, previous best: 87.4
+Epoca: 31200, Current best: 87.5, previous best: 87.5
+Epoca: 34200, Current best: 87.5, previous best: 87.5
+Epoca: 34600, Current best: 87.8, previous best: 87.8
+Epoca: 36000, Current best: 88.7, previous best: 88.7
+Epoca: 43800, Current best: 89.2, previous best: 89.2
+Epoca: 45200, Current best: 89.5, previous best: 89.5
+Epoca: 47600, Current best: 89.6, previous best: 89.6
+Epoca: 48000, Current best: 89.7, previous best: 89.7
+Epoca: 54400, Current best: 90.2, previous best: 90.2
+Epoca: 58200, Current best: 90.2, previous best: 90.2
+Epoca: 63000, Current best: 90.3, previous best: 90.3
+Epoca: 63600, Current best: 90.8, previous best: 90.8
+Epoca: 64000, Current best: 90.8, previous best: 90.8
+Epoca: 66800, Current best: 91.0, previous best: 91.0
+Epoca: 67400, Current best: 91.1, previous best: 91.1

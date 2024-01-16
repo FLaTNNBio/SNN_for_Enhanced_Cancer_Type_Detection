@@ -25,4 +25,4 @@ def cerca_gene(directory):
                 print(f"File: {file_path} - Colonna NCBI_Build non trovata")
 
 
-cerca_gene('/media/alberto/DATA/Cancer dataset/Dataset')
+cerca_gene('/media/alberto/DATA/Cancer dataset/dataset')

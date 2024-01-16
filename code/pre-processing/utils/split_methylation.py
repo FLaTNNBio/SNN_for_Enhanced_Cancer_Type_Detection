@@ -26,4 +26,4 @@ def elabora_cartella(cartella):
                 print(file_path)
 
 
-elabora_cartella('/home/musimathicslab/Desktop/Dataset (completo)')
+elabora_cartella('/home/musimathicslab/Desktop/dataset (completo)')

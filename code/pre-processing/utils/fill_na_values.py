@@ -20,5 +20,5 @@ def riempi_campi_vuoti(file_input, file_output):
 
 
 # Usa la funzione con il tuo file CSV di input e di output
-riempi_campi_vuoti('/home/musimathicslab/Desktop/Dataset/data_mrna_seq_v2_rsem.csv',
-                   '/home/musimathicslab/Desktop/Dataset/data_mrna_seq_v2_rsemm.csv')
+riempi_campi_vuoti('/home/musimathicslab/Desktop/dataset/data_mrna_seq_v2_rsem.csv',
+                   '/home/musimathicslab/Desktop/dataset/data_mrna_seq_v2_rsemm.csv')

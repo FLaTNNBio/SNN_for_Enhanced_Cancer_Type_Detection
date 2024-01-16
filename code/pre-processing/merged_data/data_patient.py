@@ -35,5 +35,5 @@ def merge_and_remove_duplicates(input_csv, output_csv, input_directory):
 
 
 merge_and_remove_duplicates('/home/alberto/Scrivania/acc_tcga/data_clinical_patient.csv',
-                            '/home/alberto/Scrivania/Dataset/data_clinical_patient.csv',
-                            '/home/alberto/Scrivania/Dataset (completo)')
+                            '/home/alberto/Scrivania/dataset/data_clinical_patient.csv',
+                            '/home/alberto/Scrivania/dataset (completo)')

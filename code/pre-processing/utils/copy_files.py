@@ -23,10 +23,10 @@ def copy_files(source_folder, destination_folder, file):
 
 
 # Sostituisci con il percorso della cartella principale di origine
-source_folder = "/home/alberto/Scrivania/Dataset"
+source_folder = "/home/alberto/Scrivania/dataset"
 
 # Sostituisci con il percorso della cartella principale di destinazione
-destination_folder = "/home/alberto/Scrivania/Dataset (completo)"
+destination_folder = "/home/alberto/Scrivania/dataset (completo)"
 
 # Sostituisci con il nome del file che stai cercando
 file_name = "data_mutations.csv"

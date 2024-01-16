@@ -166,7 +166,7 @@ def get_siamese_model(input_shape, model):
     return siamese_net
 
 
-def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
+def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_len, cancer_type):
     siamese_model = get_siamese_model(input_shape, model)
     siamese_model.summary()
 
@@ -197,8 +197,8 @@ def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
 
     # Hyper parameters
     evaluate_every = 200  # interval for evaluating on one-shot tasks
-    batch_size = 256  # max 12 for 19
-    n_iter = 20000  # No. of training iterations
+    batch_size = 26  # max 12 for 19
+    n_iter = 100000  # No. of training iterations
     N_way = len(class_test_ind.keys())  # how many classes for testing one-shot tasks
     n_val = 1000  # how many one-shot tasks to validate on
     best = -1
@@ -206,6 +206,7 @@ def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
     print(f"\nNumero di classi (Tumori) train: {len(class_train_ind.keys())}")
     print(f"Numero di classi (Tumori) test: {len(class_test_ind.keys())}")
     print(f"Numero di geni totali: {genes_len}")
+    print(f"Numero di pazienti totali: {dataset_genes.shape[0]}")
 
     print("\nStarting training process!")
     for i in range(1, n_iter + 1):
@@ -225,5 +226,5 @@ def siamese_network(dataset_genes, model, input_shape, genes_len, cancer_type):
                 print(str(i))
                 best = val_acc
 
-                with open("siamese.txt", 'a') as file:
+                with open(risultati_siamese, 'a') as file:
                     file.write("Epoca: {0}, Current best: {1}, previous best: {2}".format(str(i), val_acc, best) + '\n')

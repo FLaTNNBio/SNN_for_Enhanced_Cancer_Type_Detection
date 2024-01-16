@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-input_file = '../../Dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato.csv'
-output_file = '../../Dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0002.csv'
+input_file = '../../dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato.csv'
+output_file = '../../dataset/data_mrna/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0002.csv'
 
 df = pd.read_csv(input_file, delimiter=';')
 
@@ -36,7 +36,7 @@ plt.show()
 
 ################################################################################
 # Scrivi le deviazioni standard nel file di testo
-deviation_output_file = "../../Dataset/data_mrna/deviation.txt"
+deviation_output_file = "../../dataset/data_mrna/deviation.txt"
 
 with open(deviation_output_file, 'w') as file:
     for column, deviation in zip(deviazioni_std.index, deviazioni_std.values):

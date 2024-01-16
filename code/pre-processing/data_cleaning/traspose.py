@@ -29,9 +29,9 @@ def trasponi_csv(input_path, output_path):
 
 
 if __name__ == "__main__":
-    input_file_path = "../../Dataset/data_mrna_seq_v2_rsem.csv"
-    output_file_path_clean = "../../Dataset/output_elimina_righe.csv"
-    output_file_path = "../../Dataset/output_trasposto.csv"
+    input_file_path = "../../dataset/data_mrna_seq_v2_rsem.csv"
+    output_file_path_clean = "../../dataset/output_elimina_righe.csv"
+    output_file_path = "../../dataset/output_trasposto.csv"
 
     elimina_prime_nove_righe(input_file_path, output_file_path_clean)
     trasponi_csv(output_file_path_clean, output_file_path)

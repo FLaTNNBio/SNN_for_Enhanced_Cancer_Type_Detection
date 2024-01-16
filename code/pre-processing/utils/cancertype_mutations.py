@@ -14,6 +14,6 @@ def aggiungi_colonna_cancer_type(file1, file2, output_file):
     df1.to_csv(output_file, index=False, sep=';')
 
 
-aggiungi_colonna_cancer_type('/home/musimathicslab/Desktop/Cancer/Dataset/data_mutations.csv',
-                             '/home/musimathicslab/Desktop/Cancer/Dataset/data_clinical_patient.csv',
+aggiungi_colonna_cancer_type('/home/musimathicslab/Desktop/Cancer/dataset/data_mutations.csv',
+                             '/home/musimathicslab/Desktop/Cancer/dataset/data_clinical_patient.csv',
                              '/home/musimathicslab/Desktop/output.csv')

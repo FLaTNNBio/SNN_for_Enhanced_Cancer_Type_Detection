@@ -2,8 +2,8 @@ import pandas as pd
 
 
 if __name__ == "__main__":
-    input_file = '../../Dataset/output_trasposto.csv'
-    output_file = '../../Dataset/output_trasposto_copy.csv'
+    input_file = '../../dataset/output_trasposto.csv'
+    output_file = '../../dataset/output_trasposto_copy.csv'
 
     df = pd.read_csv(input_file, delimiter=';', low_memory=False)
 
