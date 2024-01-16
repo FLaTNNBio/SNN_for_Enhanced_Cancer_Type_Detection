@@ -1,4 +1,4 @@
-/code/Dataset/*
+/code/dataset/*
 /code/*.keras
 /code/*.csv
 /code/__pycache__/*
