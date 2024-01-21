@@ -5,24 +5,27 @@ from tensorflow.keras.models import load_model
 
 if __name__ == "__main__":
     only_variant = False
-    data_encoded = False
-    classification = True
+    data_encoded = True
+    classification = False
     siamese_net = True
+    siamese_variants = True
 
     dataset_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/dataset/data_mrna/"
-                    "deviazione_standard_dataPatient/"
-                    "data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0030_dataPatient.csv")
+                    "SNP_DEL_INS_CNA_mutations_and_variants/"
+                    "data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0030_dataPatient_mutations_and_variants.csv")
 
-    encoded_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/models/0030/espressione_genomica/"
-                    "encoded-dataset.csv")
+    encoded_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/models/0030/"
+                    "espressione_genomica_con_varianti_2LAYER/encoded-dataset.csv")
 
-    model_path = "/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/models/0030/espressione_genomica/"
+    model_path = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/models/0030/"
+                  "espressione_genomica_con_varianti_2LAYER/")
 
-    risultati_classification = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati/"
-                                "classification/0030/classification_espressione_genomica.csv")
+    risultati_classification = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/"
+                                "risultati/classification/0030/"
+                                "classification_espressione_genomica_con_varianti_2LAYER.csv")
 
     risultati_siamese = ("/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/risultati/siamese/0030/"
-                         "siamese_espressione_genomica.txt")
+                         "siamese_espressione_genomica_con_varianti_2LAYER.txt")
 
     encoded_data, dataset_df, weights, n_classes, classes, le, y = (
         pre_processing(dataset_path, encoded_path, data_encoded, only_variant))
@@ -38,4 +41,4 @@ if __name__ == "__main__":
         input_shape = (genes_len, 1)
 
         cancer_type = pd.DataFrame(y, columns=['CANCER_TYPE'])
-        siamese_network(risultati_siamese, dataset_df, model, input_shape, genes_len, cancer_type)
+        siamese_network(risultati_siamese, dataset_df, model, input_shape, genes_len, cancer_type, siamese_variants)

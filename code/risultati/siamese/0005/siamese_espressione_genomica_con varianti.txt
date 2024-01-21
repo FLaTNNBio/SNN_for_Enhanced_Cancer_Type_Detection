@@ -1,0 +1,35 @@
+-------------------------------------------
+| Dataset 0005 espr. genomica + varianti: |
+|  - 5719 geni;				              |
+|  - 25 classi;				              |
+|  - 8796 pazienti			              |
+-------------------------------------------
+
+#################################################################################
+
+Iperparametri:
+
+- evaluate_every = 200  # interval for evaluating on one-shot tasks
+- batch_size = 26  # max 12 for 19
+- n_iter = 100000  # No. of training iterations
+- n_val = 1000  # how many one-shot tasks to validate on
+- best = -1
+
+Epoca: 200, Current best: 13.7, previous best: 13.7
+Epoca: 400, Current best: 15.7, previous best: 15.7
+Epoca: 600, Current best: 15.9, previous best: 15.9
+Epoca: 800, Current best: 16.8, previous best: 16.8
+Epoca: 1200, Current best: 17.6, previous best: 17.6
+Epoca: 1400, Current best: 17.8, previous best: 17.8
+Epoca: 1600, Current best: 20.0, previous best: 20.0
+Epoca: 1800, Current best: 21.0, previous best: 21.0
+Epoca: 2000, Current best: 21.0, previous best: 21.0
+Epoca: 2200, Current best: 21.0, previous best: 21.0
+Epoca: 2800, Current best: 22.4, previous best: 22.4
+
+------------------------------
+Dopo 3600 'Train Loss: nan'  | 
+------------------------------
+
+#################################################################################
+

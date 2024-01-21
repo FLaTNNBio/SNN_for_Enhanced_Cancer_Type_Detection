@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from keras import backend as K
+import tensorflow.keras.backend as K
 from tensorflow.keras.layers import Input, Dense, Conv1D, Flatten, MaxPooling1D
 from tensorflow.keras.models import Model
 from sklearn.model_selection import train_test_split
@@ -66,8 +66,10 @@ def pre_processing(dataset_path, encoded_path, data_encoded, only_variant):
     dataset_df = pd.read_csv(dataset_path, delimiter=';', low_memory=False)
     dataset_df = dataset_df[dataset_df['CANCER_TYPE'] != '[Not Available]']
 
-    # grouped = dataset_df.groupby('CANCER_TYPE').filter(lambda x: len(x) >= 30)
-    # dataset_df = dataset_df[dataset_df['CANCER_TYPE'].isin(grouped['CANCER_TYPE'].unique())]
+    # Elimina le classi di cancro che hanno meno di 9 sample
+    cancers_count = dataset_df['CANCER_TYPE'].value_counts()
+    valori_da_mantenere = cancers_count[cancers_count >= 9].index
+    dataset_df = dataset_df[dataset_df['CANCER_TYPE'].isin(valori_da_mantenere)]
 
     dataset_df = dataset_df.dropna()
     dataset_df = dataset_df.reset_index(drop=True)
@@ -82,6 +84,7 @@ def pre_processing(dataset_path, encoded_path, data_encoded, only_variant):
 
     constant_columns = [col for col in dataset_df.columns if dataset_df[col].nunique() == 1]
     constant_columns_genes = [element for element in constant_columns if element != "SOMATIC_STATUS"]
+    constant_columns_genes = [element for element in constant_columns_genes if element != "SAMPLE_TYPE"]
 
     result, genes = del_genes_constant(constant_columns_genes)
     if len(result) > 0:
@@ -136,7 +139,16 @@ def created_model(input_shape, n_classes):
     conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='relu', padding='same')(maxpool1)
     maxpool2 = MaxPooling1D(pool_size=2)(conv3)
 
-    flatten = Flatten()(maxpool2)
+    ###################################################################################################
+    # Ulterior 2 layers
+    conv4 = Conv1D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')(maxpool2)
+    maxpool3 = MaxPooling1D(pool_size=2)(conv4)
+
+    conv5 = Conv1D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')(maxpool3)
+    maxpool4 = MaxPooling1D(pool_size=2)(conv5)
+    ###################################################################################################
+
+    flatten = Flatten()(maxpool4)
     output = Dense(n_classes, activation='softmax')(flatten)
 
     return output, input_layer

@@ -1,10 +1,19 @@
-Iperparametri (Dataset 0005 --> 1349 geni --> 26 classi)
+--------------------------------
+| Dataset 0005 espr. genomica: |
+|  - 1349 geni;				   |
+|  - 26 classi;				   |
+|  - 9757 pazienti			   |
+--------------------------------
 
-- evaluate_every = 200  # interval for evaluating on one-shot tasks
-- batch_size = 26  # max 12 for 19
-- n_iter = 100000  # No. of training iterations
-- n_val = 1000  # how many one-shot tasks to validate on
-- best = -1
+#################################################################################
+
+Iperparametri:
+
+ - evaluate_every = 200  # interval for evaluating on one-shot tasks
+ - batch_size = 26  # max 12 for 19
+ - n_iter = 100000  # No. of training iterations
+ - n_val = 1000  # how many one-shot tasks to validate on
+ - best = -1
 
 Epoca: 200, Current best: 54.5, previous best: 54.5
 Epoca: 400, Current best: 60.6, previous best: 60.6
@@ -47,3 +56,5 @@ Epoca: 63600, Current best: 90.8, previous best: 90.8
 Epoca: 64000, Current best: 90.8, previous best: 90.8
 Epoca: 66800, Current best: 91.0, previous best: 91.0
 Epoca: 67400, Current best: 91.1, previous best: 91.1
+
+#################################################################################

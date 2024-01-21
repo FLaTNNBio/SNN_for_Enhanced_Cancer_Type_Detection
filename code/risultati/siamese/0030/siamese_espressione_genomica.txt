@@ -1,7 +1,156 @@
-Iperparametri (Dataset 0030 --> 166 geni --> 26 classi --> 9757 pazienti)
-- evaluate_every = 200  # interval for evaluating on one-shot tasks
-- batch_size = 26  # max 12 for 19
-- n_iter = 100000  # No. of training iterations
-- n_val = 1000  # how many one-shot tasks to validate on
-- best = -1
+--------------------------------
+| Dataset 0030 espr. genomica: |
+|  - 166 geni;				   |
+|  - 26 classi;				   |
+|  - 9757 pazienti			   |
+--------------------------------
 
+#################################################################################
+
+Iperparametri:
+
+ - evaluate_every = 200  # interval for evaluating on one-shot tasks
+ - batch_size = 26  # max 12 for 19
+ - n_iter = 100000  # No. of training iterations
+ - n_val = 1000  # how many one-shot tasks to validate on
+ - best = -1
+
+Epoca: 200, Current best: 44.6, previous best: 44.6
+Epoca: 400, Current best: 51.3, previous best: 51.3
+Epoca: 600, Current best: 51.6, previous best: 51.6
+Epoca: 800, Current best: 58.7, previous best: 58.7
+Epoca: 1000, Current best: 62.6, previous best: 62.6
+Epoca: 1200, Current best: 63.0, previous best: 63.0
+Epoca: 1400, Current best: 63.2, previous best: 63.2
+Epoca: 1600, Current best: 64.5, previous best: 64.5
+Epoca: 2200, Current best: 65.5, previous best: 65.5
+Epoca: 2600, Current best: 68.3, previous best: 68.3
+Epoca: 2800, Current best: 68.6, previous best: 68.6
+Epoca: 3000, Current best: 70.5, previous best: 70.5
+Epoca: 3200, Current best: 73.1, previous best: 73.1
+Epoca: 3400, Current best: 74.6, previous best: 74.6
+Epoca: 4800, Current best: 79.1, previous best: 79.1
+Epoca: 6800, Current best: 79.4, previous best: 79.4
+Epoca: 8600, Current best: 79.5, previous best: 79.5
+Epoca: 8800, Current best: 81.0, previous best: 81.0
+Epoca: 9600, Current best: 81.5, previous best: 81.5
+Epoca: 10800, Current best: 84.4, previous best: 84.4
+Epoca: 18600, Current best: 84.5, previous best: 84.5
+Epoca: 20000, Current best: 84.8, previous best: 84.8
+Epoca: 20200, Current best: 85.6, previous best: 85.6
+Epoca: 20600, Current best: 86.1, previous best: 86.1
+
+-------------------------------
+Dopo 22600 'Train Loss: nan'  |
+-------------------------------
+
+#################################################################################
+
+Iperparametri:
+
+ - evaluate_every = 200  # interval for evaluating on one-shot tasks
+ - batch_size = 128  # max 12 for 19
+ - n_iter = 100000  # No. of training iterations
+ - n_val = 1000  # how many one-shot tasks to validate on
+ - best = -1
+
+Epoca: 200, Current best: 49.6, previous best: 49.6
+Epoca: 400, Current best: 57.0, previous best: 57.0
+Epoca: 600, Current best: 62.5, previous best: 62.5
+Epoca: 800, Current best: 71.0, previous best: 71.0
+Epoca: 1600, Current best: 71.0, previous best: 71.0
+Epoca: 1800, Current best: 73.9, previous best: 73.9
+Epoca: 2200, Current best: 75.9, previous best: 75.9
+Epoca: 2400, Current best: 77.1, previous best: 77.1
+Epoca: 3000, Current best: 77.3, previous best: 77.3
+Epoca: 3400, Current best: 78.9, previous best: 78.9
+Epoca: 3800, Current best: 79.0, previous best: 79.0
+Epoca: 4600, Current best: 79.7, previous best: 79.7
+Epoca: 5000, Current best: 81.5, previous best: 81.5
+Epoca: 7000, Current best: 82.4, previous best: 82.4
+Epoca: 7800, Current best: 83.0, previous best: 83.0
+Epoca: 9200, Current best: 83.4, previous best: 83.4
+Epoca: 10200, Current best: 83.4, previous best: 83.4
+Epoca: 13000, Current best: 84.0, previous best: 84.0
+Epoca: 17400, Current best: 84.3, previous best: 84.3
+Epoca: 17600, Current best: 84.4, previous best: 84.4
+Epoca: 17800, Current best: 84.7, previous best: 84.7
+Epoca: 25800, Current best: 85.0, previous best: 85.0
+Epoca: 29600, Current best: 85.7, previous best: 85.7
+Epoca: 41200, Current best: 85.9, previous best: 85.9
+Epoca: 42800, Current best: 86.1, previous best: 86.1
+Epoca: 55200, Current best: 86.6, previous best: 86.6
+
+-------------------------------
+Dopo 74000 'Train Loss: nan'  |
+-------------------------------
+
+#################################################################################
+
+Iperparametri:
+
+ - evaluate_every = 200  # interval for evaluating on one-shot tasks
+ - batch_size = 256  # max 12 for 19
+ - n_iter = 200000  # No. of training iterations
+ - n_val = 1000  # how many one-shot tasks to validate on
+ - best = -1
+
+Epoca: 200, Current best: 58.4, previous best: 58.4
+Epoca: 400, Current best: 64.5, previous best: 64.5
+Epoca: 600, Current best: 69.5, previous best: 69.5
+Epoca: 800, Current best: 71.2, previous best: 71.2
+Epoca: 1000, Current best: 72.0, previous best: 72.0
+Epoca: 1200, Current best: 74.5, previous best: 74.5
+Epoca: 1400, Current best: 78.6, previous best: 78.6
+Epoca: 1600, Current best: 81.4, previous best: 81.4
+Epoca: 2400, Current best: 81.6, previous best: 81.6
+Epoca: 2600, Current best: 83.0, previous best: 83.0
+Epoca: 3000, Current best: 83.7, previous best: 83.7
+Epoca: 3800, Current best: 83.7, previous best: 83.7
+Epoca: 4000, Current best: 86.3, previous best: 86.3
+Epoca: 5600, Current best: 86.4, previous best: 86.4
+Epoca: 8000, Current best: 86.4, previous best: 86.4
+Epoca: 8800, Current best: 87.1, previous best: 87.1
+Epoca: 9000, Current best: 87.4, previous best: 87.4
+Epoca: 10200, Current best: 88.5, previous best: 88.5
+Epoca: 35200, Current best: 88.9, previous best: 88.9
+Epoca: 35400, Current best: 89.7, previous best: 89.7
+Epoca: 54200, Current best: 89.8, previous best: 89.8
+
+-------------------------------
+Dopo 94000 'Train Loss: nan'  |
+-------------------------------
+
+#################################################################################
+
+Iperparametri:
+
+ - evaluate_every = 200  # interval for evaluating on one-shot tasks
+ - batch_size = 512  # max 12 for 19
+ - n_iter = 200000  # No. of training iterations
+ - n_val = 1000  # how many one-shot tasks to validate on
+ - best = -1
+
+Epoca: 200, Current best: 63.3, previous best: 63.3
+Epoca: 400, Current best: 72.4, previous best: 72.4
+Epoca: 600, Current best: 73.1, previous best: 73.1
+Epoca: 800, Current best: 77.9, previous best: 77.9
+Epoca: 1000, Current best: 79.6, previous best: 79.6
+Epoca: 1200, Current best: 82.0, previous best: 82.0
+Epoca: 1600, Current best: 82.9, previous best: 82.9
+Epoca: 1800, Current best: 85.7, previous best: 85.7
+Epoca: 3400, Current best: 85.8, previous best: 85.8
+Epoca: 3800, Current best: 87.8, previous best: 87.8
+Epoca: 7600, Current best: 88.3, previous best: 88.3
+Epoca: 13800, Current best: 88.6, previous best: 88.6
+Epoca: 14000, Current best: 88.6, previous best: 88.6
+Epoca: 14600, Current best: 88.6, previous best: 88.6
+Epoca: 14800, Current best: 88.7, previous best: 88.7
+Epoca: 16000, Current best: 89.8, previous best: 89.8
+Epoca: 29800, Current best: 91.1, previous best: 91.1
+
+-------------------------------
+Dopo 60000 'Train Loss: nan'  |
+-------------------------------
+
+#################################################################################

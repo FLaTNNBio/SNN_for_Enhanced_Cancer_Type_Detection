@@ -1,13 +1,13 @@
 import numpy as np
+import pandas as pd
 import tensorflow as tf
-from keras import backend as K
-from keras.models import Sequential
-from keras.optimizers import Adam
+import tensorflow.keras.backend as K
+from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import random
 from tensorflow.keras.layers import Input, Dense, Lambda, Dropout, Conv1D, Flatten, MaxPooling1D
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import Model, Sequential
 
 
 def initialize_bias(shape, name=None, dtype=None):
@@ -76,7 +76,7 @@ def test_oneshot(model, genes_len, x_test, class_test_ind, N, k, verbose=0):
         print("Evaluating model on {} random {} way one-shot learning tasks ... \n".format(k, N))
     for i in range(k):
         inputs, targets, true_category, list_N_samples = make_oneshot_task(genes_len, x_test, class_test_ind, N)
-        probs = model.predict(inputs)
+        probs = model.predict(inputs, verbose=0)
         if np.argmax(probs) == np.argmax(targets):
             n_correct += 1
     percent_correct = (100.0 * n_correct / k)
@@ -141,50 +141,78 @@ def get_siamese_model(input_shape, model):
     left_input = Input(input_shape)
     right_input = Input(input_shape)
 
+    ####################################################################################################################
     # Convolutional Neural Network
     siamese_model = Sequential()
 
-    siamese_model.add(
-        Conv1D(filters=256, kernel_size=50, strides=50, activation='relu', weights=model.layers[1].get_weights(),
-               padding='same', input_shape=input_shape))
-    siamese_model.add(
-        Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', weights=model.layers[2].get_weights(),
-               padding='same'))
+    # Primo layer Conv1D
+    conv1 = Conv1D(filters=256, kernel_size=50, strides=1, activation='relu', padding='same', input_shape=input_shape)
+    siamese_model.add(conv1)
+    conv1.set_weights(model.layers[1].get_weights())
+
+    # Secondo layer Conv1D
+    conv2 = Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', padding='same')
+    siamese_model.add(conv2)
+    conv2.set_weights(model.layers[2].get_weights())
+
     siamese_model.add(MaxPooling1D(pool_size=2))
-    siamese_model.add(Conv1D(filters=128, kernel_size=5, strides=1, activation='sigmoid',
-                             weights=model.layers[4].get_weights(), padding='same'))
+
+    # Terzo layer Conv1D
+    conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='sigmoid', padding='same')
+    siamese_model.add(conv3)
+    conv3.set_weights(model.layers[4].get_weights())
+
     siamese_model.add(MaxPooling1D(pool_size=2))
+
+    # Quarto layer Conv1D
+    conv4 = Conv1D(filters=64, kernel_size=3, strides=1, activation='sigmoid', padding='same')
+    siamese_model.add(conv4)
+    conv4.set_weights(model.layers[6].get_weights())
+
+    siamese_model.add(MaxPooling1D(pool_size=2))
+
+    # Quinto layer Conv1D
+    conv5 = Conv1D(filters=32, kernel_size=3, strides=1, activation='sigmoid', padding='same')
+    siamese_model.add(conv5)
+    conv5.set_weights(model.layers[8].get_weights())
+
+    siamese_model.add(MaxPooling1D(pool_size=2))
+
     siamese_model.add(Flatten())
+    ####################################################################################################################
 
     encoded_l = siamese_model(left_input)
     encoded_r = siamese_model(right_input)
 
     # Connect the inputs with the outputs
     siamese_net = Model(inputs=[left_input, right_input],
-                        outputs=last_layer(encoded_l, encoded_r, lyr_name='L2'), # prediction and cosine_similarity
+                        outputs=last_layer(encoded_l, encoded_r, lyr_name='L2'),  # prediction and cosine_similarity
                         name="siamese-network")
     return siamese_net
 
 
-def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_len, cancer_type):
+def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_len, cancer_type, siamese_variants):
     siamese_model = get_siamese_model(input_shape, model)
     siamese_model.summary()
 
-    optimizer = Adam(lr=0.000005)
+    optimizer = Adam(learning_rate=0.000005)
     siamese_model.compile(loss="binary_crossentropy", optimizer=optimizer)
 
     # Pre-Processing dataset for siamese network
-    dataset_genes["CANCER_TYPE"] = cancer_type
+    dataset_genes = pd.concat([dataset_genes, cancer_type], axis=1)
 
-    # Ripetiamo train_test_split finché x_test non contiene almeno due valori 'Nerve Sheath Tumor' in 'CANCER_TYPE'
-    while True:
-        random_state = random.randint(0, 42)
-        x_train, x_test = train_test_split(dataset_genes,
-                                           test_size=0.20, stratify=cancer_type, random_state=random_state)
+    if not siamese_variants:
+        # Ripetiamo train_test_split finché x_test non contiene almeno due valori 'Nerve Sheath Tumor' in 'CANCER_TYPE'
+        while True:
+            random_state = random.randint(0, 42)
+            x_train, x_test = train_test_split(dataset_genes,
+                                               test_size=0.20, stratify=cancer_type, random_state=random_state)
 
-        # Controllare se ci sono almeno due 'Nerve Sheath Tumor' in x_test
-        if (x_test['CANCER_TYPE'] == 'Nerve Sheath Tumor').sum() >= 2:
-            break
+            # Controllare se ci sono almeno due 'Nerve Sheath Tumor' in x_test
+            if (x_test['CANCER_TYPE'] == 'Nerve Sheath Tumor').sum() >= 2:
+                break
+    else:
+        x_train, x_test = train_test_split(dataset_genes, test_size=0.20, stratify=cancer_type, random_state=42)
 
     x_train = x_train.reset_index(drop=True)
     x_test = x_test.reset_index(drop=True)
@@ -197,15 +225,16 @@ def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_
 
     # Hyper parameters
     evaluate_every = 200  # interval for evaluating on one-shot tasks
-    batch_size = 26  # max 12 for 19
-    n_iter = 100000  # No. of training iterations
+    batch_size = 256  # max 12 for 19
+    n_iter = 1000000  # No. of training iterations
     N_way = len(class_test_ind.keys())  # how many classes for testing one-shot tasks
     n_val = 1000  # how many one-shot tasks to validate on
     best = -1
 
     print(f"\nNumero di classi (Tumori) train: {len(class_train_ind.keys())}")
     print(f"Numero di classi (Tumori) test: {len(class_test_ind.keys())}")
-    print(f"Numero di geni totali: {genes_len}")
+
+    print(f"\nNumero di geni totali: {genes_len}")
     print(f"Numero di pazienti totali: {dataset_genes.shape[0]}")
 
     print("\nStarting training process!")

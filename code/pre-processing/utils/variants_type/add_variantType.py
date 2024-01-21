@@ -88,6 +88,9 @@ def prepare_new_columns(dataset, data_mutation, cna):
 
 
 def pre_process_cna(data_final, cna):
+    cna = cna[cna['Hugo_Symbol'].isin(data_final.columns[9:])]
+    cna = cna.reset_index(drop=True)
+
     # Add cna values in 'data_final'
     patients = cna.columns[1:]
     i = 0
@@ -101,8 +104,11 @@ def pre_process_cna(data_final, cna):
                 cna_val = 0
 
             gene_cna = gene + '_CNA'
-            index_var = data_final.loc[data_final['index'] == patient].index[0]
-            data_final.at[index_var, gene_cna] = float(cna_val)
+            patients_rows = data_final.loc[data_final['index'] == patient]
+
+            if not patients_rows.empty:
+                index_var = patients_rows.index[0]
+                data_final.at[index_var, gene_cna] = float(cna_val)
 
         if i % 50 == 0:
             print(i)
@@ -117,6 +123,10 @@ def pre_process_cna(data_final, cna):
 
 
 def pre_process_mutations(data_final, data_mutation):
+    data_mutation = data_mutation[data_mutation['Hugo_Symbol'].isin(data_final.columns[9:])]
+    data_mutation = data_mutation[data_mutation['Tumor_Sample_Barcode'].isin(data_final['index'])]
+    data_mutation = data_mutation.reset_index(drop=True)
+
     # Add variant_type in 'data_final'
     for index, row in data_mutation.iterrows():
         gene = row['Hugo_Symbol']
@@ -124,9 +134,12 @@ def pre_process_mutations(data_final, data_mutation):
         variant_type = row['Variant_Type']
 
         gene_var = gene + '_' + variant_type
-        index_var = data_final.loc[data_final['index'] == patient].index[0]
-        count_var = data_final.at[index_var, gene_var]
-        data_final.at[index_var, gene_var] = count_var + 1
+        patient_rows = data_final.loc[data_final['index'] == patient]
+
+        if not patient_rows.empty:
+            index_var = patient_rows.index[0]
+            count_var = data_final.at[index_var, gene_var]
+            data_final.at[index_var, gene_var] = count_var + 1
 
     data_final.to_csv('/home/alberto/Documenti/GitHub/Detection-signature-cancer/code/dataset/data_mrna/'
                       'mutations_and_variants/'
