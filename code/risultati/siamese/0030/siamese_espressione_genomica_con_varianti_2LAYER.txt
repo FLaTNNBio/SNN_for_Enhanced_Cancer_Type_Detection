@@ -10,7 +10,7 @@
 Iperparametri:
 
 - evaluate_every = 200  # interval for evaluating on one-shot tasks
-- batch_size = 26  # max 12 for 19
+- batch_size = 26
 - n_iter = 100000  # No. of training iterations
 - n_val = 1000  # how many one-shot tasks to validate on
 - best = -1
@@ -47,7 +47,7 @@ Epoca: 115400, Current best: 20.8, previous best: 20.8
 Iperparametri:
 
 - evaluate_every = 200  # interval for evaluating on one-shot tasks
-- batch_size = 128  # max 12 for 19
+- batch_size = 128
 - n_iter = 200000  # No. of training iterations
 - n_val = 1000  # how many one-shot tasks to validate on
 - best = -1
@@ -98,7 +98,7 @@ Epoca: 174400, Current best: 75.4, previous best: 75.4
 Iperparametri:
 
 - evaluate_every = 200  # interval for evaluating on one-shot tasks
-- batch_size = 256  # max 12 for 19
+- batch_size = 256
 - n_iter = 100000  # No. of training iterations
 - n_val = 1000  # how many one-shot tasks to validate on
 - best = -1
