@@ -225,7 +225,7 @@ def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_
 
     # Hyper parameters
     evaluate_every = 200  # interval for evaluating on one-shot tasks
-    batch_size = 256  # max 12 for 19
+    batch_size = 256
     n_iter = 1000000  # No. of training iterations
     N_way = len(class_test_ind.keys())  # how many classes for testing one-shot tasks
     n_val = 1000  # how many one-shot tasks to validate on

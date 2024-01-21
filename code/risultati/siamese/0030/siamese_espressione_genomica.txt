@@ -10,7 +10,7 @@
 Iperparametri:
 
  - evaluate_every = 200  # interval for evaluating on one-shot tasks
- - batch_size = 26  # max 12 for 19
+ - batch_size = 26
  - n_iter = 100000  # No. of training iterations
  - n_val = 1000  # how many one-shot tasks to validate on
  - best = -1
@@ -49,7 +49,7 @@ Dopo 22600 'Train Loss: nan'  |
 Iperparametri:
 
  - evaluate_every = 200  # interval for evaluating on one-shot tasks
- - batch_size = 128  # max 12 for 19
+ - batch_size = 128
  - n_iter = 100000  # No. of training iterations
  - n_val = 1000  # how many one-shot tasks to validate on
  - best = -1
@@ -90,7 +90,7 @@ Dopo 74000 'Train Loss: nan'  |
 Iperparametri:
 
  - evaluate_every = 200  # interval for evaluating on one-shot tasks
- - batch_size = 256  # max 12 for 19
+ - batch_size = 256
  - n_iter = 200000  # No. of training iterations
  - n_val = 1000  # how many one-shot tasks to validate on
  - best = -1
@@ -126,7 +126,7 @@ Dopo 94000 'Train Loss: nan'  |
 Iperparametri:
 
  - evaluate_every = 200  # interval for evaluating on one-shot tasks
- - batch_size = 512  # max 12 for 19
+ - batch_size = 512
  - n_iter = 200000  # No. of training iterations
  - n_val = 1000  # how many one-shot tasks to validate on
  - best = -1
