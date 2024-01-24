@@ -1,4 +1,4 @@
-# Detection Signature Cancer
+# Leveraging gene expression and genomic varation for cancer prediction using one-shot learning
 The Cancer Genome Atlas (TCGA), a cancer genomics reference program, has molecularly characterized more than 20,000 primary cancer samples and paired normal samples covering 33 types of cancer.
 This joint effort between the NCI and the National Human Genome Research Institute began in 2006. In the twelve years since, TCGA has generated more than 2.5 petabytes of genomic, epigenomic, transcriptomic, and proteomics. These data have led to improvements in the ability to diagnose, treat and prevent cancer by helping to establish the importance of cancer genomics.
 
