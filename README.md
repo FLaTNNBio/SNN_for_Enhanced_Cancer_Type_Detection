@@ -2,7 +2,7 @@
 The Cancer Genome Atlas (TCGA), a cancer genomics reference program, has molecularly characterized more than 20,000 primary cancer samples and paired normal samples covering 33 types of cancer.
 This joint effort between the NCI and the National Human Genome Research Institute began in 2006. In the twelve years since, TCGA has generated more than 2.5 petabytes of genomic, epigenomic, transcriptomic, and proteomics. These data have led to improvements in the ability to diagnose, treat and prevent cancer by helping to establish the importance of cancer genomics.
 
-# Contribution of this work
+## Contribution of this work
 During the experimental process, the size of the dataset used was significantly increased in order to improve the diversity and representativeness of the data. This adjustment allowed the model to learn from a wider variety of examples, improving its generalization. In addition, adjustments were made to both models involved in this study, both the classification model and the Siamese-type model. A key element of the optimization was the implementation of the use of custom weights. This strategy allowed different weights to be assigned to different instances of the dataset based on the amount of samples present. Finally, a specification was introduced regarding the types of mutations, this allowed for greater precision in the analysis of genetic information. Numerous studies aimed at identifying a distinctive genomic signature for different types of cancer are being conducted in the current research landscape.
 
 ## Requirements (tested)
@@ -21,11 +21,11 @@ To install and set up cuda and cudnn follow this guide:
   <li><a href="https://developer.nvidia.com/rdp/cudnn-archive">cuDNN</a></li>
 </ul>
 
-# Related work
+## Related work
 For more information about our research project access the paper here: <a href="https://github.com/Alberto-00/Detection-signature-cancer/blob/main/exam/Bioinformatica_Paper_CancerDetection.pdf">our paper</a><br>
 To view the other papers that have contributed to the cancer research study and on which we have commented follow this link: <a href="https://github.com/Alberto-00/Detection-signature-cancer/tree/main/papers">other papers</a><br>
 
-# Author & Contacts 
+## Author & Contacts 
 
 | Name | Description |
 | --- | --- |
