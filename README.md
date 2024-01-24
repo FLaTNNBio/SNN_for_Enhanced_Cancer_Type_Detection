@@ -22,7 +22,7 @@ To install and set up cuda and cudnn follow this guide:
 </ul>
 
 # Related work
-For more information about our research project access the paper here: <a href="#">our paper</a><br>
+For more information about our research project access the paper here: <a href="https://github.com/Alberto-00/Detection-signature-cancer/blob/main/exam/Bioinformatica_Paper_CancerDetection.pdf">our paper</a><br>
 To view the other papers that have contributed to the cancer research study and on which we have commented follow this link: <a href="https://github.com/Alberto-00/Detection-signature-cancer/tree/main/papers">other papers</a><br>
 
 # Author & Contacts 
