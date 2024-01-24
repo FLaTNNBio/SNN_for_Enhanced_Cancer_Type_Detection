@@ -35,3 +35,64 @@ Iperparametri:
 - n_val = 1000  # how many one-shot tasks to validate on
 - best = -1
 
+Epoca: 200, Current best: 18.4, previous best: 18.4
+Epoca: 800, Current best: 19.9, previous best: 19.9
+Epoca: 1000, Current best: 22.8, previous best: 22.8
+Epoca: 1200, Current best: 22.9, previous best: 22.9
+Epoca: 2200, Current best: 23.2, previous best: 23.2
+Epoca: 2600, Current best: 23.4, previous best: 23.4
+Epoca: 3000, Current best: 25.9, previous best: 25.9
+Epoca: 3400, Current best: 26.7, previous best: 26.7
+Epoca: 3600, Current best: 29.4, previous best: 29.4
+Epoca: 4200, Current best: 30.0, previous best: 30.0
+Epoca: 4600, Current best: 31.0, previous best: 31.0
+Epoca: 4800, Current best: 31.5, previous best: 31.5
+Epoca: 5200, Current best: 33.1, previous best: 33.1
+Epoca: 5600, Current best: 33.2, previous best: 33.2
+Epoca: 5800, Current best: 38.4, previous best: 38.4
+Epoca: 7000, Current best: 40.5, previous best: 40.5
+Epoca: 8400, Current best: 43.0, previous best: 43.0
+Epoca: 8600, Current best: 44.9, previous best: 44.9
+Epoca: 9800, Current best: 45.0, previous best: 45.0
+Epoca: 10000, Current best: 45.9, previous best: 45.9
+Epoca: 10800, Current best: 47.0, previous best: 47.0
+Epoca: 11000, Current best: 52.2, previous best: 52.2
+Epoca: 13400, Current best: 52.5, previous best: 52.5
+Epoca: 14000, Current best: 52.8, previous best: 52.8
+Epoca: 14200, Current best: 56.3, previous best: 56.3
+Epoca: 15800, Current best: 56.4, previous best: 56.4
+Epoca: 16000, Current best: 56.6, previous best: 56.6
+Epoca: 16200, Current best: 57.4, previous best: 57.4
+Epoca: 16800, Current best: 57.9, previous best: 57.9
+Epoca: 17000, Current best: 61.0, previous best: 61.0
+Epoca: 19600, Current best: 63.1, previous best: 63.1
+Epoca: 20800, Current best: 64.4, previous best: 64.4
+Epoca: 21600, Current best: 64.7, previous best: 64.7
+Epoca: 21800, Current best: 66.5, previous best: 66.5
+Epoca: 23600, Current best: 67.4, previous best: 67.4
+Epoca: 24600, Current best: 67.8, previous best: 67.8
+Epoca: 25000, Current best: 67.9, previous best: 67.9
+Epoca: 25800, Current best: 70.7, previous best: 70.7
+Epoca: 26000, Current best: 70.9, previous best: 70.9
+Epoca: 27400, Current best: 72.1, previous best: 72.1
+Epoca: 27800, Current best: 75.6, previous best: 75.6
+Epoca: 31600, Current best: 76.2, previous best: 76.2
+Epoca: 33400, Current best: 76.3, previous best: 76.3
+Epoca: 34600, Current best: 77.7, previous best: 77.7
+Epoca: 36400, Current best: 79.0, previous best: 79.0
+Epoca: 38200, Current best: 80.9, previous best: 80.9
+Epoca: 40800, Current best: 80.9, previous best: 80.9
+Epoca: 43600, Current best: 81.1, previous best: 81.1
+Epoca: 46600, Current best: 82.3, previous best: 82.3
+Epoca: 46800, Current best: 82.4, previous best: 82.4
+Epoca: 48800, Current best: 83.7, previous best: 83.7
+Epoca: 54000, Current best: 84.0, previous best: 84.0
+Epoca: 55600, Current best: 84.5, previous best: 84.5
+Epoca: 57600, Current best: 85.1, previous best: 85.1
+Epoca: 59000, Current best: 85.3, previous best: 85.3
+
+--------------------------
+| poteva continuare ...  |
+--------------------------
+
+#################################################################################

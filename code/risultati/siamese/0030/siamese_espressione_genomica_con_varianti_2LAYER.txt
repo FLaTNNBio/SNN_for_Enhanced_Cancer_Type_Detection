@@ -136,3 +136,14 @@ Epoca: 23600, Current best: 70.1, previous best: 70.1
 Epoca: 25400, Current best: 70.5, previous best: 70.5
 Epoca: 26800, Current best: 72.8, previous best: 72.8
 Epoca: 31200, Current best: 72.8, previous best: 72.8
+Epoca: 42800, Current best: 72.8, previous best: 72.8
+Epoca: 46600, Current best: 73.8, previous best: 73.8
+Epoca: 60000, Current best: 74.0, previous best: 74.0
+Epoca: 66600, Current best: 74.1, previous best: 74.1
+Epoca: 78200, Current best: 74.5, previous best: 74.5
+
+--------------------------
+| poteva continuare ...  |
+--------------------------
+
+#################################################################################
