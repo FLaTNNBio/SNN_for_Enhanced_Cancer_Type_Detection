@@ -191,7 +191,8 @@ def get_siamese_model(input_shape, model):
     return siamese_net
 
 
-def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_len, cancer_type, siamese_variants):
+def siamese_network(siamese_path, risultati_siamese, dataset_genes, model,
+                    input_shape, genes_len, cancer_type, siamese_variants):
     siamese_model = get_siamese_model(input_shape, model)
     siamese_model.summary()
 
@@ -257,3 +258,5 @@ def siamese_network(risultati_siamese, dataset_genes, model, input_shape, genes_
 
                 with open(risultati_siamese, 'a') as file:
                     file.write("Epoca: {0}, Current best: {1}, previous best: {2}".format(str(i), val_acc, best) + '\n')
+
+                siamese_model.save(siamese_path + "model.keras")
