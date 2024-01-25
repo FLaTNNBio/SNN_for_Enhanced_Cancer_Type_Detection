@@ -3,3 +3,4 @@
 /code/*.keras
 /code/*.csv
 /code/__pycache__/*
+/code/.idea/*
