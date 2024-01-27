@@ -259,4 +259,4 @@ def siamese_network(siamese_path, risultati_siamese, dataset_genes, model,
                 with open(risultati_siamese, 'a') as file:
                     file.write("Epoca: {0}, Current best: {1}, previous best: {2}".format(str(i), val_acc, best) + '\n')
 
-                siamese_model.save(siamese_path + "model.keras")
+                siamese_model.save(siamese_path + "siamese_model.keras")
