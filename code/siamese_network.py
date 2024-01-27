@@ -1,13 +1,14 @@
+import random
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import tensorflow.keras.backend as K
-from tensorflow.keras.optimizers import Adam
+from keras import backend as K
+from keras.models import Sequential
+from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
-import random
 from tensorflow.keras.layers import Input, Dense, Lambda, Dropout, Conv1D, Flatten, MaxPooling1D
-from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.models import Model
 
 
 def initialize_bias(shape, name=None, dtype=None):
@@ -141,45 +142,33 @@ def get_siamese_model(input_shape, model):
     left_input = Input(input_shape)
     right_input = Input(input_shape)
 
-    ####################################################################################################################
     # Convolutional Neural Network
     siamese_model = Sequential()
 
-    # Primo layer Conv1D
-    conv1 = Conv1D(filters=256, kernel_size=50, strides=1, activation='relu', padding='same', input_shape=input_shape)
-    siamese_model.add(conv1)
-    conv1.set_weights(model.layers[1].get_weights())
-
-    # Secondo layer Conv1D
-    conv2 = Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', padding='same')
-    siamese_model.add(conv2)
-    conv2.set_weights(model.layers[2].get_weights())
-
+    siamese_model.add(
+        Conv1D(filters=256, kernel_size=50, strides=1, activation='relu', weights=model.layers[1].get_weights(),
+               padding='same', input_shape=input_shape))  # lo strides di questo era impostato a 'strides=50'
+    siamese_model.add(
+        Conv1D(filters=128, kernel_size=10, strides=1, activation='relu', weights=model.layers[2].get_weights(),
+               padding='same'))
     siamese_model.add(MaxPooling1D(pool_size=2))
 
-    # Terzo layer Conv1D
-    conv3 = Conv1D(filters=128, kernel_size=5, strides=1, activation='sigmoid', padding='same')
-    siamese_model.add(conv3)
-    conv3.set_weights(model.layers[4].get_weights())
-
+    siamese_model.add(Conv1D(filters=128, kernel_size=5, strides=1, activation='sigmoid',
+                             weights=model.layers[4].get_weights(), padding='same'))
     siamese_model.add(MaxPooling1D(pool_size=2))
 
-    # Quarto layer Conv1D
-    conv4 = Conv1D(filters=64, kernel_size=3, strides=1, activation='sigmoid', padding='same')
-    siamese_model.add(conv4)
-    conv4.set_weights(model.layers[6].get_weights())
-
+    #######################################################################################
+    # Ulterior 2 layers
+    siamese_model.add(Conv1D(filters=64, kernel_size=3, strides=1, activation='sigmoid',
+                             weights=model.layers[6].get_weights(), padding='same'))
     siamese_model.add(MaxPooling1D(pool_size=2))
 
-    # Quinto layer Conv1D
-    conv5 = Conv1D(filters=32, kernel_size=3, strides=1, activation='sigmoid', padding='same')
-    siamese_model.add(conv5)
-    conv5.set_weights(model.layers[8].get_weights())
-
+    siamese_model.add(Conv1D(filters=32, kernel_size=3, strides=1, activation='sigmoid',
+                             weights=model.layers[8].get_weights(), padding='same'))
     siamese_model.add(MaxPooling1D(pool_size=2))
+    #######################################################################################
 
     siamese_model.add(Flatten())
-    ####################################################################################################################
 
     encoded_l = siamese_model(left_input)
     encoded_r = siamese_model(right_input)

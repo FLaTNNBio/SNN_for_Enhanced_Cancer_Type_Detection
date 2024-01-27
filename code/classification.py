@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import tensorflow.keras.backend as K
+from keras import backend as K
 from tensorflow.keras.layers import Input, Dense, Conv1D, Flatten, MaxPooling1D
 from tensorflow.keras.models import Model
 from sklearn.model_selection import train_test_split
