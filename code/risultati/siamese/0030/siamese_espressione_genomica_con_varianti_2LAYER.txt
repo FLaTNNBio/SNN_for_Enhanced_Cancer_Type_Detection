@@ -147,3 +147,62 @@ Epoca: 78200, Current best: 74.5, previous best: 74.5
 --------------------------
 
 #################################################################################
+
+Iperparametri:
+
+- evaluate_every = 200  # interval for evaluating on one-shot tasks
+- batch_size = 256
+- n_iter = 100000  # No. of training iterations
+- n_val = 1000  # how many one-shot tasks to validate on
+- best = -1
+
+Epoca: 200, Current best: 17.8, previous best: 17.8
+Epoca: 400, Current best: 23.8, previous best: 23.8
+Epoca: 600, Current best: 24.3, previous best: 24.3
+Epoca: 800, Current best: 28.3, previous best: 28.3
+Epoca: 1200, Current best: 32.3, previous best: 32.3
+Epoca: 1600, Current best: 37.7, previous best: 37.7
+Epoca: 1800, Current best: 38.1, previous best: 38.1
+Epoca: 2000, Current best: 41.1, previous best: 41.1
+Epoca: 2400, Current best: 41.4, previous best: 41.4
+Epoca: 2600, Current best: 42.8, previous best: 42.8
+Epoca: 2800, Current best: 46.9, previous best: 46.9
+Epoca: 3600, Current best: 50.1, previous best: 50.1
+Epoca: 4400, Current best: 50.4, previous best: 50.4
+Epoca: 4600, Current best: 50.5, previous best: 50.5
+Epoca: 5400, Current best: 52.4, previous best: 52.4
+Epoca: 5800, Current best: 55.9, previous best: 55.9
+Epoca: 9200, Current best: 56.0, previous best: 56.0
+Epoca: 9800, Current best: 56.1, previous best: 56.1
+Epoca: 10000, Current best: 56.8, previous best: 56.8
+Epoca: 10800, Current best: 57.1, previous best: 57.1
+Epoca: 12200, Current best: 58.1, previous best: 58.1
+Epoca: 12600, Current best: 58.8, previous best: 58.8
+Epoca: 14200, Current best: 59.0, previous best: 59.0
+Epoca: 15600, Current best: 60.1, previous best: 60.1
+Epoca: 16600, Current best: 60.8, previous best: 60.8
+Epoca: 20200, Current best: 60.9, previous best: 60.9
+Epoca: 20600, Current best: 62.5, previous best: 62.5
+Epoca: 26800, Current best: 63.5, previous best: 63.5
+Epoca: 29200, Current best: 64.7, previous best: 64.7
+Epoca: 35600, Current best: 65.2, previous best: 65.2
+Epoca: 39000, Current best: 65.2, previous best: 65.2
+Epoca: 43000, Current best: 66.0, previous best: 66.0
+Epoca: 56800, Current best: 66.1, previous best: 66.1
+Epoca: 57800, Current best: 66.6, previous best: 66.6
+Epoca: 59800, Current best: 66.6, previous best: 66.6
+Epoca: 66400, Current best: 66.7, previous best: 66.7
+Epoca: 67600, Current best: 68.3, previous best: 68.3
+Epoca: 89000, Current best: 69.1, previous best: 69.1
+Epoca: 106600, Current best: 69.8, previous best: 69.8
+Epoca: 113000, Current best: 71.1, previous best: 71.1
+
+-----------------------------------------
+| 2° Iterazione, per salvare il modello |
+-----------------------------------------
+
+--------------------------
+| poteva continuare ...  |
+--------------------------
+
+#################################################################################
