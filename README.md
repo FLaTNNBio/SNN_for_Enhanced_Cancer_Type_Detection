@@ -160,14 +160,14 @@ normals_param_epsilon = False
 siamese_variants = False
 ```
 
-
-
 ## Siamese model with normal patients
 To perform the operations on the normals datasets, the <strong>pre-trained siamese network</strong> found in the <code>Detection-signature-cancer/code/models/0005/siamese/espressione_genomica_con_varianti_2LAYER/</code> folder was used.<br><br>
 The <code>siamese_normals</code> with normals dataset, when <code>True</code>, create a set of tresholds of similarity for each 
 <code>Cancer Type</code> and, for each <code>Normal</code>, check if the patient is inclined to contract the disease of
 the same type.
 
+The comparison is made between a normals and a parameterizable number, <code>k</code>, of patients with each type of cancer.<br>
+Thus a normals will be compared with each cancer type k times to calculate their propensity to get that type of cancer.
 A normal patient is more likely to get a type of cancer if his or her similarity value is in one of the ranges that we are now going to present.
  
 <h3 id="comparison">Different ranges for comparisons</h3>
