@@ -40,7 +40,7 @@ if __name__ == "__main__":
     ####################################################################################################################
 
     # NORMALS
-    normals_path = "/home/musimathicslab/Detection-signature-cancer/Normals2/output_variants_cna_trasposto_normalizzato_deviazione.csv"
+    normals_path = "/home/musimathicslab/Detection-signature-cancer/Normals/output_variants_cna_trasposto_normalizzato_deviazione.csv"
 
     ####################################################################################################################
 
