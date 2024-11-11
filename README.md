@@ -167,7 +167,7 @@ The <code>siamese_normals</code> with normals dataset, when <code>True</code>, c
 the same type.
 
 The comparison is made between a normals and a parameterizable number, <code>k</code>, of patients with each type of cancer.<br>
-Thus a normals will be compared with each cancer type k times to calculate their propensity to get that type of cancer.
+Thus a normals will be compared with each cancer type k times to calculate their propensity to get that type of cancer.<br><br>
 A normal patient is more likely to get a type of cancer if his or her similarity value is in one of the ranges that we are now going to present.
  
 <h3 id="comparison">Different ranges for comparisons</h3>
