@@ -137,6 +137,14 @@ The folder contains subfolders for different functions.<br>
     <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset (i.e., <code>data_clinical_patient</code>, <code>data_clinical_sample</code>, <code>data_cna</code>, <code>data_methylation</code>, <code>data_mrna_seq</code>, <code>data_mutation</code>);</li><br>
     <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
 </ul>
+To pre-process the dataset correctly, it is mandatory to perform at least the following:
+<ul>
+    <li><code>traspose.py</code></li>
+    <li><code>normalize.py</code></li>
+    <li><code>deviazione.py</code></li>
+    <li><code>add_variantType.py</code></li>
+    <li><code>cna_scaling.py</code></li>
+</ul>
 
 ## Pre-Processing normals
 In order to work on normals patients, pre-processing has to follow a somewhat different procedure since their dateset
@@ -153,6 +161,7 @@ contains a variety of parameters that are not used by the network and therefore 
 </ul>
 
 ## Siamese model with normal patients
+To perform the operations on the normals datasets, the <strong>pre-trained siamese network</strong> found in the <code>Detection-signature-cancer/code/models/0005/siamese/espressione_genomica_con_varianti_2LAYER/</code> folder was used.<br><br>
 The <code>siamese_normals</code> with normals dataset, when <code>True</code>, create a set of tresholds of similarity for each 
 <code>Cancer Type</code> and, for each <code>Normal</code>, check if the patient is inclined to contract the disease of
 the same type.
@@ -203,5 +212,5 @@ The files inside Over_Percentage contains on each row:<br>
 | Name | Description |
 | --- | --- |
 | <p dir="auto"><strong>Rocco Zaccagnino</strong> |<p dir="auto">Email - <a href="mailto:rzaccagnino@unisa.it">rzaccagnino@unisa.it</a></p>|
-| <p dir="auto">Gerardo Benevento<strong></strong> |<p dir="auto">Email - <a href="mailto:gbenevento@unisa.it">gbenevento@unisa.it</a></p>|
-| <p dir="auto">Delfina Malandrino<strong></strong> |<p dir="auto">Email - <a href="mailto:dmalandrino@unisa.it">dmalandrino@unisa.it</a></p>|
+| <p dir="auto"><strong>Gerardo Benevento</strong> |<p dir="auto">Email - <a href="mailto:gbenevento@unisa.it">gbenevento@unisa.it</a></p>|
+| <p dir="auto"><strong>Delfina Malandrino</strong> |<p dir="auto">Email - <a href="mailto:dmalandrino@unisa.it">dmalandrino@unisa.it</a></p>|
