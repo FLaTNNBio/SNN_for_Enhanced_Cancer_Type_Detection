@@ -9,11 +9,11 @@ def cna_scaling(df_path):
 
     df[cna_columns] = (df[cna_columns] + 2) /4
 
-    df.to_csv("/home/musimathicslab/Detection-signature-cancer/Normals2/output_variants_cna_trasposto_normalizzato_deviazione.csv", index=False, sep='\t')
+    df.to_csv("/home/musimathicslab/Detection-signature-cancer/Normals/output_variants_cna_trasposto_normalizzato_deviazione.csv", index=False, sep='\t')
     print(df[cna_columns])
 
 
 if __name__ == '__main__':
-    dataset = "/home/musimathicslab/Detection-signature-cancer/Normals2/output_variants_trasposto_normalizzato_deviazione.csv"
+    dataset = "/home/musimathicslab/Detection-signature-cancer/Normals/output_variants_trasposto_normalizzato_deviazione.csv"
 
     cna_scaling(dataset)
