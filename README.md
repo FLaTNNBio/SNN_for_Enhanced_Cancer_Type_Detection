@@ -35,6 +35,38 @@ Within the <code>main.py</code> file there is the possibility to modify several 
 <li>Download of the Normals Dataset to paste in <code>Normals</code> folder: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a>;</li>
 </ul>
 
+## Pre-Processing
+Within the project, there is the <code>pre-processing</code> folder.
+Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
+The folder contains subfolders for different functions.<br>
+<ul>
+    <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
+    <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset (i.e., <code>data_clinical_patient</code>, <code>data_clinical_sample</code>, <code>data_cna</code>, <code>data_methylation</code>, <code>data_mrna_seq</code>, <code>data_mutation</code>);</li><br>
+    <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
+</ul>
+To pre-process the dataset correctly, it is mandatory to perform at least the following:
+<ul>
+    <li><code>traspose.py</code></li>
+    <li><code>normalize.py</code></li>
+    <li><code>deviazione.py</code></li>
+    <li><code>add_variantType.py</code></li>
+    <li><code>cna_scaling.py</code></li>
+</ul>
+
+## Pre-Processing normals
+In order to work on normals patients, pre-processing has to follow a somewhat different procedure since their dateset
+contains a variety of parameters that are not used by the network and therefore negligible.
+<ul>
+    <li>As with standard pre-processing, the first step is to transpose the dataset with <code>traspose.py</code>.</li>
+    <li>As for the second step, we save the indexes and the cancer status of each normals with <code>normals_statusAndindex.py</code> we'll use them later on.</li>
+    <li>Third step we perform normalization with <code>normalize.py</code>.</li>
+    <li>Fourth step, we calculate the deviation with <code>deviazione.py</code>.</li>
+    <li>Fifth step, we clean the dataset from columns with information not needed by the network with <code>data_cleaning_normals.py</code>. </li>
+    <li>Sixth step, we calculate the variants of the genes with <code>add_variantType.py</code>.</li>
+    <li>Seventh step, normalize the variant column _cna with <code>cna_scaling.py</code>.</li>
+    <li>Eighth step, add the columns of which genes were not found with <code>add_missing_variants.py</code>.</li>
+</ul>
+
 ### Config Path
 In this script there are some path that we are going to describe now:<br>
 
@@ -128,37 +160,7 @@ normals_param_epsilon = False
 siamese_variants = False
 ```
 
-## Pre-Processing
-Within the project, there is the <code>pre-processing</code> folder.
-Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
-The folder contains subfolders for different functions.<br>
-<ul>
-    <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
-    <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset (i.e., <code>data_clinical_patient</code>, <code>data_clinical_sample</code>, <code>data_cna</code>, <code>data_methylation</code>, <code>data_mrna_seq</code>, <code>data_mutation</code>);</li><br>
-    <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
-</ul>
-To pre-process the dataset correctly, it is mandatory to perform at least the following:
-<ul>
-    <li><code>traspose.py</code></li>
-    <li><code>normalize.py</code></li>
-    <li><code>deviazione.py</code></li>
-    <li><code>add_variantType.py</code></li>
-    <li><code>cna_scaling.py</code></li>
-</ul>
 
-## Pre-Processing normals
-In order to work on normals patients, pre-processing has to follow a somewhat different procedure since their dateset
-contains a variety of parameters that are not used by the network and therefore negligible.
-<ul>
-    <li>As with standard pre-processing, the first step is to transpose the dataset with <code>traspose.py</code>.</li>
-    <li>As for the second step, we save the indexes and the cancer status of each normals with <code>normals_statusAndindex.py</code> we'll use them later on.</li>
-    <li>Third step we perform normalization with <code>normalize.py</code>.</li>
-    <li>Fourth step, we calculate the deviation with <code>deviazione.py</code>.</li>
-    <li>Fifth step, we clean the dataset from columns with information not needed by the network with <code>data_cleaning_normals.py</code>. </li>
-    <li>Sixth step, we calculate the variants of the genes with <code>add_variantType.py</code>.</li>
-    <li>Seventh step, normalize the variant column _cna with <code>cna_scaling.py</code>.</li>
-    <li>Eighth step, add the columns of which genes were not found with <code>add_missing_variants.py</code>.</li>
-</ul>
 
 ## Siamese model with normal patients
 To perform the operations on the normals datasets, the <strong>pre-trained siamese network</strong> found in the <code>Detection-signature-cancer/code/models/0005/siamese/espressione_genomica_con_varianti_2LAYER/</code> folder was used.<br><br>
