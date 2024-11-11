@@ -7,11 +7,7 @@ During the experimental process, the size of the dataset used was significantly 
 
 ## Requirements (tested)
 
-| Module               | Version |
-|----------------------|---------|
-| tensorflow           | 2.15.0  |
-| torch                | 2.1.2   |
-| cuda                 | 12.2    |
+<code>pip install -r requirements.txt</code>
 
 To install tensorflow follow this guide: <a href="https://blog.tensorflow.org/2023/11/whats-new-in-tensorflow-2-15.html">link</a><br>
 To install and set up cuda and cudnn follow this guide:
@@ -26,13 +22,17 @@ For more information about our research project access the paper here: <a href="
 To view the other papers that have contributed to the cancer research study and on which we have commented follow this link: <a href="https://github.com/Alberto-00/Detection-signature-cancer/tree/main/papers">other papers</a><br>
 
 ## Technical informations - main.py
-In this section we introduce technical informations and installing guides!
+To run the project run the <code>main.py</code> script.
+
+Within the <code>main.py</code> file there is the possibility to modify several parameters that will be explained later in this section (<a href="#bv">Boolean Variables</a>).
+<br><br>Also in this section we introduce technical informations and installing guides!
 
 ### Download Dataset
 <ul>
   <li>Download from Google Drive all the files in the folder <code>Dataset</code>: <a href="https://drive.google.com/drive/folders/1sE_4XjG516zfMvnWwfQ3gR5h7_4NlvjL?usp=sharing">LINK</a>;</li>
   <li>Files should be downloaded within a folder with the name <code>dataset</code>;</li>
   <li>Copy the dataset folder and paste it inside the project in this way: <code>/Detection-signature-cancer/code/dataset</code></li>
+<li>Download of the Normals Dataset to paste in <code>Normals</code> folder: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a>;</li>
 </ul>
 
 ### Config Path
@@ -54,6 +54,11 @@ Siamese
 <ol style="list-style-type: numbers;">  
   <li><code>siamese_path</code>: where the model of the siamese network will be saved or uploaded;</li>
   <li><code>risultati_siamese</code>: results of the siamese network;</li>
+</ol>
+
+Normals
+<ol style="list-style-type: numbers;">
+    <li><code>normals_path</code>: the dataset that contains people with and without the disease;</li>
 </ol>
 <br>
 
@@ -86,7 +91,7 @@ Becomes
 model_path = "models/0005/classification/espressione_genomica_con_varianti_2LAYER/"
 ```
 
-### Boolean Variables
+<h3 id="bv"> Boolean Variables </h3>
 Always in the <code>main.py</code> script you can set some variables:
 
 <ul>
@@ -98,8 +103,13 @@ Always in the <code>main.py</code> script you can set some variables:
     </ul>
   </li>
   <li><code>classification = True</code>: run the classification;</li>
+    <li><code>classification_normals = True</code>: run the classification on normals dataset;</li>
   <li><code>siamese_net = True</code>: run the siamese network;</li>
+    <li><code>siamese_normals = True</code>: run the siamese with normals dataset;</li>
+    <li><code>normals_max_epsilon= False</code> <a href="#comparison">type of comparison range for normals</a></li>
+    <li><code>normals_param_epsilon = True</code> <a href="#comparison">type of copmarison range for normals</a></li>
   <li><code>siamese_variants = True</code>: if you use the dataset that contains the variations in gene mutations set this on <code>True</code>;</li>
+
 </ul>
 <br>
 
@@ -109,15 +119,89 @@ If you want to use the models in this project and not start experimenting again 
 only_variant = False
 data_encoded = True
 classification = False
+classification_normals = False
 siamese_net = True
+siamese_normals = False
 siamese_variants = True
+normals_max_epsilon = False
+normals_param_epsilon = False
+siamese_variants = False
 ```
 
-To run the project run the <code>main.py</code> script.
+## Pre-Processing
+Within the project, there is the <code>pre-processing</code> folder.
+Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
+The folder contains subfolders for different functions.<br>
+<ul>
+    <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
+    <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset (i.e., <code>data_clinical_patient</code>, <code>data_clinical_sample</code>, <code>data_cna</code>, <code>data_methylation</code>, <code>data_mrna_seq</code>, <code>data_mutation</code>);</li><br>
+    <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
+</ul>
+
+## Pre-Processing normals
+In order to work on normals patients, pre-processing has to follow a somewhat different procedure since their dateset
+contains a variety of parameters that are not used by the network and therefore negligible.
+<ul>
+    <li>As with standard pre-processing, the first step is to transpose the dataset with <code>traspose.py</code>.</li>
+    <li>As for the second step, we save the indexes and the cancer status of each normals with <code>normals_statusAndindex.py</code> we'll use them later on.</li>
+    <li>Third step we perform normalization with <code>normalize.py</code>.</li>
+    <li>Fourth step, we calculate the deviation with <code>deviazione.py</code>.</li>
+    <li>Fifth step, we clean the dataset from columns with information not needed by the network with <code>data_cleaning_normals.py</code>. </li>
+    <li>Sixth step, we calculate the variants of the genes with <code>add_variantType.py</code>.</li>
+    <li>Seventh step, normalize the variant column _cna with <code>cna_scaling.py</code>.</li>
+    <li>Eighth step, add the columns of which genes were not found with <code>add_missing_variants.py</code>.</li>
+</ul>
+
+## Siamese model with normal patients
+The <code>siamese_normals</code> with normals dataset, when <code>True</code>, create a set of tresholds of similarity for each 
+<code>Cancer Type</code> and, for each <code>Normal</code>, check if the patient is inclined to contract the disease of
+the same type.
+
+A normal patient is more likely to get a type of cancer if his or her similarity value is in one of the ranges that we are now going to present.
+ 
+<h3 id="comparison">Different ranges for comparisons</h3>
+To determine whether a normal patient was likely to get a certain type of cancer, we decided to rely on two distinct ranges.
+
+#### Max Epsilon
+The first range is nothing more than the range between the average threshold of a cancer type and the deviation of that threshold. Thus, if a patient falls within this range, he or she is likely to contract that type of cancer.
+The flag to use this type of range is <code>normals_max_espilon</code>
+
+#### Param Epsilon
+The second range, on the other hand, again consists of the average threshold of a cancer type but this time with a parameterizable value. 
+The flag to use this type of range is <code>normals_param_espilon</code>
+### Results
+
+The results of each threshold calculation are saved within the <code>threshold_nameOfCancer.txt</code> file inside the <code>Threshold</code> folder.<br>
+In addition, in the root folder of the project, the <code>threshold.txt</code> file containing the values of all calculated thresholds is also generated
+
+Each of its rows is a different type of cancer and contains <code>minimum threshold</code>, <code>maximum threshold</code>, <code>average of thresholds</code>, and <code>standard deviation of thresholds</code>, respectively. <br>
+So they will be displayed like this:
+
+| Cancer_Type | Min | Max | Mean | Std |
+| --- | --- | --- |------|-----|
+
+<br>
+On the other hand, the results of comparisons with normal patients is saved within the <code>Results_Comparison</code> folder.<br>
+Which in turn contains the Over_Comparison folder, where all 
+normal patients who have fallen within the established range of epsilon 
+are saved, and the Over_Percentage folder, where normal patients 
+who have fallen within the established 
+range of epsilon <b>in a percentage greater than 50%</b> are saved
+
+<br>The files inside Over_Comparison contains on each row:<br>
+
+| Patient identifier | Calculated similarity | Type of cancer | Threshold of cancer |
+|--------------------|-----------------------| --- |------|
+
+The files inside Over_Percentage contains on each row:<br>
+
+| Patient identifier  | Type of cancer |
+|----|----|
 
 ## Author & Contacts 
 
 | Name | Description |
 | --- | --- |
-| <p dir="auto"><strong>Alberto Montefusco</strong> |<br>Developer - <a href="https://github.com/Alberto-00">Alberto-00</a></p><p dir="auto">Email - <a href="mailto:a.montefusco28@studenti.unisa.it">a.montefusco28@studenti.unisa.it</a></p><p dir="auto">LinkedIn - <a href="https://www.linkedin.com/in/alberto-montefusco">Alberto Montefusco</a></p><p dir="auto">My WebSite - <a href="https://alberto-00.github.io/">alberto-00.github.io</a></p><br>|
-| <p dir="auto"><strong>Alessandro Macaro</strong> |<br>Developer   - <a href="https://github.com/mtolkien">mtolkien</a></p><p dir="auto">Email - <a href="mailto:a.macaro@studenti.unisa.it">a.macaro@studenti.unisa.it</a></p><p dir="auto">LinkedIn - <a href="https://www.linkedin.com/in/alessandro-macaro-391b7a214/">Alessandro Macaro</a></p><br>|
+| <p dir="auto"><strong>Rocco Zaccagnino</strong> |<br></p><p dir="auto">Email - <a href="mailto:rzaccagnino@unisa.it">rzaccagnino@unisa.it</a></p>|
+| <p dir="auto">Gerardo Benevento<strong></strong> |<p dir="auto">Email - <a href="mailto:gbenevento@unisa.it">gbenevento@unisa.it</a></p>|
+| <p dir="auto">Delfina Malandrino<strong></strong> |<p dir="auto">Email - <a href="mailto:dmalandrino@unisa.it">dmalandrino@unisa.it</a></p>|
