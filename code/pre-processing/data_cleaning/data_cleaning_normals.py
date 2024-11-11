@@ -66,8 +66,8 @@ def fast_pre_processing(dataset_path):
 
 
 def data_cleaning_normals(dataset_df):
-    cna = pd.read_csv("/home/musimathicslab/Detection-signature-cancer/Normals2/data_cna.csv", sep="\t")
-    output = pd.read_csv("/home/musimathicslab/Detection-signature-cancer/Normals2/output_trasposto_normalizzato_deviazione.csv", sep="\t", low_memory=False)
+    cna = pd.read_csv("/home/musimathicslab/Detection-signature-cancer/Normals/data_cna.csv", sep="\t")
+    output = pd.read_csv("/home/musimathicslab/Detection-signature-cancer/Normals/output_trasposto_normalizzato_deviazione.csv", sep="\t", low_memory=False)
 
     cna = cna.drop('Entrez_Gene_Id', axis=1)
     cna.rename(columns={"Hugo_Symbol":"index"}, inplace=True)
@@ -82,7 +82,7 @@ def data_cleaning_normals(dataset_df):
 
     output = pd.concat([output['index'], output[colonne_comuni]], axis=1)
 
-    output.to_csv('/home/musimathicslab/Detection-signature-cancer/Normals2/output_pre_variants.csv', sep="\t", index=False)
+    output.to_csv('/home/musimathicslab/Detection-signature-cancer/Normals/output_pre_variants.csv', sep="\t", index=False)
 
 if __name__ == '__main__':
     dataset_df, n_classes, classes, y = fast_pre_processing(
