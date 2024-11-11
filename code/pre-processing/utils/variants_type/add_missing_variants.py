@@ -66,7 +66,7 @@ def fast_pre_processing(dataset_path):
 
 
 def add_missing(dataset_df):
-    data = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals2/output_variants_trasposto_normalizzato_deviazione.csv',
+    data = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals/output_variants_trasposto_normalizzato_deviazione.csv',
                        sep='\t', low_memory=False)
 
     c_m = dataset_df.columns.difference(data.columns)
@@ -77,7 +77,7 @@ def add_missing(dataset_df):
     finali = data.columns.intersection(dataset_df.columns)
     print(data[finali])
 
-    data[finali].to_csv('/home/musimathicslab/Detection-signature-cancer/Normals2/output_variants_trasposto_normalizzato_deviazione.csv', sep=';', index=False)
+    data[finali].to_csv('/home/musimathicslab/Detection-signature-cancer/Normals/output_variants_trasposto_normalizzato_deviazione.csv', sep=';', index=False)
 
 if __name__ == '__main__':
     dataset_df, n_classes, classes, y = fast_pre_processing('/home/musimathicslab/Detection-signature-cancer/Dataset/data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0005_dataPatient_mutations_and_variants2.csv')
