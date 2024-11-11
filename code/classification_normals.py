@@ -68,7 +68,7 @@ def pre_processing_normals(dataset_path, encoded_path, data_encoded, only_varian
     dataset_df = pd.read_csv(dataset_path, delimiter='\t', low_memory=False)
     dataset_df = dataset_df.replace(',', '.', regex=True)
 
-    ts = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals2/normals_status.csv',
+    ts = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals/normals_status.csv',
                      sep='\t', low_memory=False)
 
     dataset_df = pd.concat([ts, dataset_df], axis=1)
