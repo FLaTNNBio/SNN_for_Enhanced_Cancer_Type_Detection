@@ -202,6 +202,6 @@ The files inside Over_Percentage contains on each row:<br>
 
 | Name | Description |
 | --- | --- |
-| <p dir="auto"><strong>Rocco Zaccagnino</strong> |<br></p><p dir="auto">Email - <a href="mailto:rzaccagnino@unisa.it">rzaccagnino@unisa.it</a></p>|
+| <p dir="auto"><strong>Rocco Zaccagnino</strong> |<p dir="auto">Email - <a href="mailto:rzaccagnino@unisa.it">rzaccagnino@unisa.it</a></p>|
 | <p dir="auto">Gerardo Benevento<strong></strong> |<p dir="auto">Email - <a href="mailto:gbenevento@unisa.it">gbenevento@unisa.it</a></p>|
 | <p dir="auto">Delfina Malandrino<strong></strong> |<p dir="auto">Email - <a href="mailto:dmalandrino@unisa.it">dmalandrino@unisa.it</a></p>|
