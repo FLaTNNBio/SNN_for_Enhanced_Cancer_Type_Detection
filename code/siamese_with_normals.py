@@ -231,10 +231,10 @@ def calc_threshold(siamese_model, dataset_genes, cancer_type, selected_type, sta
 def prepare_normals(normals_path):
     normals_df = pd.read_csv(normals_path, delimiter='\t', low_memory=False)
 
-    ts = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals2/normals_status.csv', delimiter='\t',
+    ts = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals/normals_status.csv', delimiter='\t',
                      low_memory=False)
 
-    ts_i = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals2/normals_index.csv', delimiter='\t',
+    ts_i = pd.read_csv('/home/musimathicslab/Detection-signature-cancer/Normals/normals_index.csv', delimiter='\t',
                        low_memory=False)
 
     return normals_df, ts['TUMOR_STATUS'], ts_i['index']
