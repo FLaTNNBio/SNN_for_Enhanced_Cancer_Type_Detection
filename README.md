@@ -17,10 +17,6 @@ To install and set up cuda and cudnn follow this guide:
   <li><a href="https://developer.nvidia.com/rdp/cudnn-archive">cuDNN</a></li>
 </ul>
 
-## Related work
-For more information about our research project access the paper here: <a href="https://github.com/Alberto-00/Detection-signature-cancer/blob/main/exam/Bioinformatica_Paper_CancerDetection.pdf">our paper</a><br>
-To view the other papers that have contributed to the cancer research study and on which we have commented follow this link: <a href="https://github.com/Alberto-00/Detection-signature-cancer/tree/main/papers">other papers</a><br>
-
 ## Technical informations - main.py
 To run the project run the <code>main.py</code> script.
 
@@ -29,7 +25,7 @@ Within the <code>main.py</code> file there is the possibility to modify several 
 
 ### Download Dataset
 <ul>
-  <li>Download from Google Drive all the files in the folder <code>Dataset</code>: <a href="https://drive.google.com/drive/folders/1sE_4XjG516zfMvnWwfQ3gR5h7_4NlvjL?usp=sharing">LINK</a>;</li>
+  <li>Download from Google Drive all the files in the folder <code>Dataset</code>: <a href="https://drive.google.com/drive/folders/1_mIUXzWdfXwy4XapOQedXiA6G9aEutZQ">LINK</a>;</li>
   <li>Files should be downloaded within a folder with the name <code>dataset</code>;</li>
   <li>Copy the dataset folder and paste it inside the project in this way: <code>/Detection-signature-cancer/code/dataset</code></li>
 <li>Download of the Normals Dataset to paste in <code>Normals</code> folder: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a>;</li>
