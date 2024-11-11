@@ -26,8 +26,7 @@ Within the <code>main.py</code> file there is the possibility to modify several 
 ### Download Dataset
 <ul>
   <li>Download from Google Drive all the files in the folder <code>Dataset</code>: <a href="https://drive.google.com/drive/folders/1_mIUXzWdfXwy4XapOQedXiA6G9aEutZQ">LINK</a>;</li>
-  <li>Files should be downloaded within a folder with the name <code>dataset</code>;</li>
-  <li>Copy the dataset folder and paste it inside the project in this way: <code>/Detection-signature-cancer/code/dataset</code></li>
+  <li>Files should be downloaded within a folder with the name <code>Dataset</code>;</li>
 <li>Download of the Normals Dataset to paste in <code>Normals</code> folder: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a>;</li>
 </ul>
 
