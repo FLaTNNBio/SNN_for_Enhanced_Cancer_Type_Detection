@@ -204,6 +204,43 @@ The files inside Over_Percentage contains on each row:<br>
 | Patient identifier  | Type of cancer |
 |----|----|
 
+## SHAP-enhanced SNNs: a novel mathematical perspective
+
+### Overview
+
+This repository provides a framework for integrating SHAP values into a Siamese Neural Network (SNN) for cancer-type prediction. The SNN computes a **similarity score** between pairs of samples, reflecting their likelihood of belonging to the same cancer type. SHAP values are used to quantify the contribution of each feature to the similarity score, providing insights into feature importance in the context of cancer classification.
+
+### Key Concepts
+
+1. **Similarity Score**: Given a pair of input samples `x_i` and `x_j`, the SNN computes a similarity score `S(fv(x_i), fv(x_j)) ∈ [0, 1]`, where `fv(x)` represents the feature vector of sample `x`. This score indicates the likelihood of the samples belonging to the same cancer type.
+2. **SHAP Value Integration**: SHAP values quantify the contribution of individual features to the similarity score. However, since features for a pair of samples can assume different values (`fv_i(x)` and `fv_i(y)`), two SHAP values (`φ_i(x)` and `φ_i(y)`) are computed independently for each feature.
+3. **Unified SHAP Value**: To summarize the importance of a feature for a sample pair `p = (x, y)`, the unified SHAP value is defined as:  
+   \(\phi_i(p) = \frac{|\phi_i(x)| + |\phi_i(y)|}{2}\).  
+   This value measures the combined contribution of the feature across both samples, capturing the overall influence on the similarity score.
+4. **Global Feature Importance**: For a set of sample pairs `P`, the global SHAP importance of a feature `i` is the mean unified SHAP value across all pairs in `P`, defined as:  
+   \(\Phi_i(P) = \frac{\sum_{p \in P} \phi_i(p)}{|P|}\).
+
+### Cancer-Specific Feature Importance
+
+To identify the most important features for each cancer type `c`, the following methodology is applied:
+1. Extract all samples corresponding to `c`.
+2. Generate pairs:
+   - **Positive Pair**: Two samples from the same cancer type.
+   - **Negative Pair**: A sample from `c` paired with one from a different cancer type.
+3. Compute \(\Phi_i(P_c)\), the cancer-specific global feature importance, using the pairs \(P_c\).
+
+This approach considers both the similarity and dissimilarity contributions of features, leveraging all available data. By creating both positive and negative pairs, it accounts for the feature's role in distinguishing between cancer types.
+
+### Advantages
+
+This technique offers the following improvements:
+- **Granular Insights**: Feature importance is calculated specifically for each cancer type, as opposed to the dataset-wide approach proposed in [Mostavi et al. (2021)](https://doi.org/10.1109/mostavi2021cancersiamese).
+- **Gene-Level Analysis**: The method enables identifying gene-associated feature importance (e.g., gene expression, genomic mutations) for each of the 24 cancer types described in the dataset.
+
+### Code
+
+
+
 ## Author & Contacts 
 
 | Name | Description |
