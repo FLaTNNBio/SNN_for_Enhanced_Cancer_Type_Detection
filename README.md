@@ -215,7 +215,7 @@ This repository provides a framework for integrating SHAP values into a Siamese 
 1. **Similarity Score**: Given a pair of input samples `x_i` and `x_j`, the SNN computes a similarity score `S(fv(x_i), fv(x_j)) ∈ [0, 1]`, where `fv(x)` represents the feature vector of sample `x`. This score indicates the likelihood of the samples belonging to the same cancer type.
 2. **SHAP Value Integration**: SHAP values quantify the contribution of individual features to the similarity score. However, since features for a pair of samples can assume different values (`fv_i(x)` and `fv_i(y)`), two SHAP values (`φ_i(x)` and `φ_i(y)`) are computed independently for each feature.
 3. **Unified SHAP Value**: To summarize the importance of a feature for a sample pair `p = (x, y)`, the unified SHAP value is defined as:  
-   (`φ_i(p)` = \frac{|`φ_i(x)`| + |`φ_i(y)`|).  
+   φ_i(p) = (|φ_i(x)| + |φ_i(y)|) / 2
    This value measures the combined contribution of the feature across both samples, capturing the overall influence on the similarity score.
 4. **Global Feature Importance**: For a set of sample pairs `P`, the global SHAP importance of a feature `i` is the mean unified SHAP value across all pairs in `P`, defined as:  
   Φ_i(P) = (Σ φ_i(p) for p ∈ P) / |P|
