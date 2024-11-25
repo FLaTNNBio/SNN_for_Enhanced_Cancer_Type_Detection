@@ -238,7 +238,15 @@ This technique offers the following improvements:
 - **Gene-Level Analysis**: The method enables identifying gene-associated feature importance (e.g., gene expression, genomic mutations) for each of the 24 cancer types described in the dataset.
 
 ### Code
-
+The Jupyter notebook ```aggregated_cancer_shap_analysis.ipynb``` gives the possibilty to extract most features importance with the usage of SHAP values techniques using the trained siamese network.
+Take care the modify the following path to match the model path:
+```
+model=load_model('path/to/siames_model, safe_mode=False, custom_objects={'initialize_bias': initialize_bias})
+```
+and load the dataset:
+```
+dataset_df, n_classes, classes, y = pre_processing(path/to/dataset.zip)
+```
 
 
 ## Author & Contacts 
