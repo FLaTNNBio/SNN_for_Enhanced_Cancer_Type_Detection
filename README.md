@@ -218,7 +218,7 @@ This repository provides a framework for integrating SHAP values into a Siamese 
    (`φ_i(p)` = \frac{|`φ_i(x)`| + |`φ_i(y)`|).  
    This value measures the combined contribution of the feature across both samples, capturing the overall influence on the similarity score.
 4. **Global Feature Importance**: For a set of sample pairs `P`, the global SHAP importance of a feature `i` is the mean unified SHAP value across all pairs in `P`, defined as:  
-   (`φ_i(P)` = \frac{\sum_{p \in P} `φ_i(x)`(p)}{|P|}).
+  Φ_i(P) = (Σ φ_i(p) for p ∈ P) / |P|
 
 ### Cancer-Specific Feature Importance
 
