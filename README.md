@@ -21,25 +21,25 @@ To install and set up cuda and cudnn follow this guide:
 
 The dataset of cancer patients is composed of data obtained from
 <a href='https://www.cbioportal.org/'>cBioPortal for Cancer Genomics</a> and is composed of several files, namely:
-
-<code>data_clinical_patient</code>, which contains clinical data on the
- patient (such as Patient ID, gender, and tumor status)
- <code>data_clinical_sample</code>, which contains data regarding
- the tumor samples
- <code>data_cna</code>, which contains information about changes
- in the copy number of specific DNA segments
- <code>data_methylation</code>, which contains information on the
- DNA methylation
- <code>data_mrna_seq_v2_rsem</code>, which   contains the sequencing mRNA sequencing of tumor samples.
- <code>data_mutations</code>, which contains mutation data
- obtained by whole-exome sequencing
- <code>data_rppa</code>, which contains data on the expression of the
- proteins
-
+<ul>
+  <li><code>data_clinical_patient</code>, which contains clinical data on the
+ patient (such as Patient ID, gender, and tumor status)</li>
+ <li><code>data_clinical_sample</code>, which contains data regarding
+ the tumor samples</li>
+ <li><code>data_cna</code>, which contains information about changes
+ in the copy number of specific DNA segments</li>
+ <li><code>data_methylation</code>, which contains information on the
+ DNA methylation</li>
+ <li><code>data_mrna_seq_v2_rsem</code>, which   contains the sequencing mRNA sequencing of tumor samples.</li>
+ <li><code>data_mutations</code>, which contains mutation data
+ obtained by whole-exome sequencing</li>
+ <li><code>data_rppa</code>, which contains data on the expression of the
+ proteins</li>
+</ul>
 
 ### Pre-Processing
 Within the project, there is the <code>pre-processing</code> folder.
-Within this are the <code>.py</code> files used to preprocess the datasets.<br>
+Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
 The folder contains subfolders for different functions.<br>
 <ul>
     <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
