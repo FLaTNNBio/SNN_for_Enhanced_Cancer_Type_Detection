@@ -46,7 +46,8 @@ The folder contains subfolders for different functions.<br>
     <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset</li><br>
     <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
 </ul>
-To pre-process the dataset correctly, it is mandatory to perform at least the following commands:
+To pre-process the dataset correctly, it is mandatory to perform the following commands:
+
 <ul>
     <li><code>python3 traspose.py</code>, this script takes as input the <code>data_mrna_seq_v2_rsem</code> file and returns a the transposed csv</li><br>
     <li><code>python3 normalize.py</code>, this script takes as input the result of the previous script and returns a new csv file with the normalized values</li><br>
