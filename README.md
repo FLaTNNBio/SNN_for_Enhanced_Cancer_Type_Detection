@@ -82,7 +82,7 @@ However, given the current absence of normal patient data within the cBioPortal 
 More specifically, the <code>cesc_tcga</code> dataset containing data on normal patients was used.
 
 Link to the normals dataset used: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a><br>
-Files related to the normals dataset should be placed within a folder called Normals
+Files related to the normals dataset should be placed within a folder called <b>Normals</b>
 
 
 ## Pre-Processing normals
