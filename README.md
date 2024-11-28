@@ -17,108 +17,115 @@ To install and set up cuda and cudnn follow this guide:
   <li><a href="https://developer.nvidia.com/rdp/cudnn-archive">cuDNN</a></li>
 </ul>
 
-## Technical informations - main.py
-To run the project run the <code>main.py</code> script.
+## Dataset of cancer patients 
 
-Within the <code>main.py</code> file there is the possibility to modify several parameters that will be explained later in this section (<a href="#bv">Boolean Variables</a>).
-<br><br>Also in this section we introduce technical informations and installing guides!
-
-### Download Dataset
+The dataset of cancer patients is composed of data obtained from
+<a href='https://www.cbioportal.org/'>cBioPortal for Cancer Genomics</a> and is composed of several files, namely:
 <ul>
-  <li>Download from Google Drive all the files in the folder <code>Dataset</code>: <a href="https://drive.google.com/drive/folders/1_mIUXzWdfXwy4XapOQedXiA6G9aEutZQ">LINK</a>;</li>
-  <li>Files should be downloaded within a folder with the name <code>Dataset</code>;</li>
-<li>Download of the Normals Dataset to paste in <code>Normals</code> folder: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a>;</li>
+  <li><code>data_clinical_patient</code>, which contains clinical data on the
+ patient (such as Patient ID, gender, and tumor status)</li>
+ <li><code>data_clinical_sample</code>, which contains data regarding
+ the tumor samples</li>
+ <li><code>data_cna</code>, which contains information about changes
+ in the copy number of specific DNA segments</li>
+ <li><code>data_methylation</code>, which contains information on the
+ DNA methylation</li>
+ <li><code>data_mrna_seq_v2_rsem</code>, which   contains the sequencing mRNA sequencing of tumor samples.</li>
+ <li><code>data_mutations</code>, which contains mutation data
+ obtained by whole-exome sequencing</li>
+ <li><code>data_rppa</code>, which contains data on the expression of the
+ proteins</li>
 </ul>
 
-## Pre-Processing
+### Pre-Processing
 Within the project, there is the <code>pre-processing</code> folder.
 Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
 The folder contains subfolders for different functions.<br>
 <ul>
     <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
-    <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset (i.e., <code>data_clinical_patient</code>, <code>data_clinical_sample</code>, <code>data_cna</code>, <code>data_methylation</code>, <code>data_mrna_seq</code>, <code>data_mutation</code>);</li><br>
+    <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset</li><br>
     <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
 </ul>
-To pre-process the dataset correctly, it is mandatory to perform at least the following:
+To pre-process the dataset correctly, it is mandatory to perform at least the following commands:
 <ul>
-    <li><code>traspose.py</code></li>
-    <li><code>normalize.py</code></li>
-    <li><code>deviazione.py</code></li>
-    <li><code>add_variantType.py</code></li>
-    <li><code>cna_scaling.py</code></li>
+    <li><code>python3 traspose.py</code>, this script takes as input the <code>data_mrna_seq_v2_rsem</code> file and returns a the transposed csv</li><br>
+    <li><code>python3 normalize.py</code>, this script takes as input the result of the previous script and returns a new csv file with the normalized values</li><br>
+    <li><code>python3 deviazione.py</code>, this script takes as input the result of the previous script and returns a new csv file with the standard deviation applied </li>
+    <li><code>python3 add_variantType.py</code>, this script takes as input the result of the previous script, the file <code>data_mutations.csv</code> and <code>data_cna.csv</code> and returns the dataset with the gene variants </li>
+    <li><code>python3 cna_scaling.py</code>, this script takes as input the result of the previous script and returns the dataset with normalized gene variants</li>
 </ul>
+Or, if you do not want to perform the above steps, you can download the dataset already used for this experiment: <a href="https://drive.google.com/drive/folders/1_mIUXzWdfXwy4XapOQedXiA6G9aEutZQ">LINK</a>.
+<br>Files should be downloaded within a folder with the name <code>Dataset</code>.
+
+## Dataset of people without cancer (Normals)
+
+Exactly as with the previously mentioned dataset, we need the files:
+
+<ul>
+  <li><code>data_clinical_patient</code>, which contains clinical data on the
+ patient (such as Patient ID, gender, and tumor status)</li>
+ <li><code>data_clinical_sample</code>, which contains data regarding
+ the tumor samples</li>
+ <li><code>data_cna</code>, which contains information about changes
+ in the copy number of specific DNA segments</li>
+ <li><code>data_methylation</code>, which contains information on the
+ DNA methylation</li>
+ <li><code>data_mrna_seq_v2_rsem</code>, which   contains the sequencing mRNA sequencing of tumor samples.</li>
+ <li><code>data_mutations</code>, which contains mutation data
+ obtained by whole-exome sequencing</li>
+ <li><code>data_rppa</code>, which contains data on the expression of the
+ proteins</li>
+</ul>
+
+However, given the current absence of normal patient data within the cBioPortal for Cancer Genomics platform, the dataset of normal patients was formed from data found on the GitHub of cBioPortal in the DataHub section.
+More specifically, the <code>cesc_tcga</code> dataset containing data on normal patients was used.
+
+Link to the normals dataset used: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a><br>
+Files related to the normals dataset should be placed within a folder called Normals
+
 
 ## Pre-Processing normals
 In order to work on normals patients, pre-processing has to follow a somewhat different procedure since their dateset
 contains a variety of parameters that are not used by the network and therefore negligible.
 <ul>
-    <li>As with standard pre-processing, the first step is to transpose the dataset with <code>traspose.py</code>.</li>
-    <li>As for the second step, we save the indexes and the cancer status of each normals with <code>normals_statusAndindex.py</code> we'll use them later on.</li>
-    <li>Third step we perform normalization with <code>normalize.py</code>.</li>
-    <li>Fourth step, we calculate the deviation with <code>deviazione.py</code>.</li>
-    <li>Fifth step, we clean the dataset from columns with information not needed by the network with <code>data_cleaning_normals.py</code>. </li>
-    <li>Sixth step, we calculate the variants of the genes with <code>add_variantType.py</code>.</li>
-    <li>Seventh step, normalize the variant column _cna with <code>cna_scaling.py</code>.</li>
-    <li>Eighth step, add the columns of which genes were not found with <code>add_missing_variants.py</code>.</li>
+    <li>As with standard pre-processing, the first step is to transpose the dataset with <code>python3 traspose.py</code>.</li>
+    <li>As for the second step, we save the indexes and the cancer status of each normals with <code>python3 normals_statusAndindex.py</code> we'll use them later on.</li>
+    <li>Third step we perform normalization with <code>python3 normalize.py</code>.</li>
+    <li>Fourth step, we calculate the deviation with <code>python3 deviazione.py</code>.</li>
+    <li>Fifth step, we clean the dataset from columns with information not needed by the network with <code>python3 data_cleaning_normals.py</code>. </li>
+    <li>Sixth step, we calculate the variants of the genes with <code>python3 add_variantType.py</code>.</li>
+    <li>Seventh step, normalize the variant column _cna with <code>python3 cna_scaling.py</code>.</li>
+    <li>Eighth step, add the columns of which genes were not found with <code>python3 add_missing_variants.py</code>.</li>
 </ul>
 
 ### Config Path
 In this script there are some path that we are going to describe now:<br>
 
-Dataset
+#### Dataset
 <ol style="list-style-type: numbers;">
-  <li><code>dataset_path</code>: the dataset that we want to use (<code>SNP_DEL_INS_CNA_mutations_and_variants</code> has two);</li>
+  <li><code>dataset_path</code>: the dataset that we want to use</li>
   <li><code>encoded_path</code>: the encoded of the dataset;</li>
 </ol>
 
-Classification
+#### Classification
 <ol style="list-style-type: numbers;">  
   <li><code>model_path</code>: where the model will be saved or uploaded;</li>
   <li><code>risultati_classification</code>: results of the classification;</li>
 </ol>
 
-Siamese
+#### Siamese
 <ol style="list-style-type: numbers;">  
   <li><code>siamese_path</code>: where the model of the siamese network will be saved or uploaded;</li>
   <li><code>risultati_siamese</code>: results of the siamese network;</li>
 </ol>
 
-Normals
+#### Normals
 <ol style="list-style-type: numbers;">
     <li><code>normals_path</code>: the dataset that contains people with and without the disease;</li>
 </ol>
 <br>
 
-If you want to change the dataset to use either <code>0030</code> or <code>0005</code> (read the paper for the meanings) you only 
-need to edit the string containing <code>0030</code> or <code>0005</code> and replace it with one of the two.
-
-For example:
-```
-dataset_path = ("dataset/data_mrna/SNP_DEL_INS_CNA_mutations_and_variants/"
-                    "data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0030_dataPatient_mutations_and_variants.csv")      
-```
-
-Becomes
-
-```
-dataset_path = ("dataset/data_mrna/SNP_DEL_INS_CNA_mutations_and_variants/"
-                    "data_mrna_v2_seq_rsem_trasposto_normalizzato_deviazione_0005_dataPatient_mutations_and_variants.csv")      
-```
-
-<br>
-
-Or
-```
-model_path = "models/0030/classification/espressione_genomica_con_varianti_2LAYER/"
-```
-
-Becomes
-
-```
-model_path = "models/0005/classification/espressione_genomica_con_varianti_2LAYER/"
-```
-
-<h3 id="bv"> Boolean Variables </h3>
+### Boolean Variables
 Always in the <code>main.py</code> script you can set some variables:
 
 <ul>
@@ -141,7 +148,7 @@ Always in the <code>main.py</code> script you can set some variables:
 <br>
 
 The Siamese Network can only be launched if it has a classification model already trained and saved. In the project the classification model has already been trained. 
-If you want to use the models in this project and not start experimenting again set the parameters in this way (example for <code>0030</code> dataset):
+If you want to use the models in this project and not start experimenting again set the parameters in this way:
 ```
 only_variant = False
 data_encoded = True
