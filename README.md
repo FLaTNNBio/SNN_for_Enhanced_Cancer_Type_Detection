@@ -39,7 +39,7 @@ The dataset of cancer patients is composed of data obtained from
 
 ### Pre-Processing
 Within the project, there is the <code>pre-processing</code> folder.
-Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
+Within this are the <code>.py</code> files used to preprocess the datasets.<br>
 The folder contains subfolders for different functions.<br>
 <ul>
     <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
