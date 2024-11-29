@@ -39,15 +39,14 @@ The dataset of cancer patients is composed of data obtained from
 
 ### Pre-Processing
 Within the project, there is the <code>pre-processing</code> folder.
-Within this are the <code>.py</code> files used to preprocess the datasets.<br>
+Within this are the <code>.py</code> files used to do preprocessing of the datasets.<br>
 The folder contains subfolders for different functions.<br>
 <ul>
     <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
     <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset</li><br>
     <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
 </ul>
-To pre-process the dataset correctly, it is mandatory to perform the following commands:
-
+To pre-process the dataset correctly, it is mandatory to perform at least the following commands:
 <ul>
     <li><code>python3 traspose.py</code>, this script takes as input the <code>data_mrna_seq_v2_rsem</code> file and returns a the transposed csv</li><br>
     <li><code>python3 normalize.py</code>, this script takes as input the result of the previous script and returns a new csv file with the normalized values</li><br>
@@ -82,7 +81,7 @@ However, given the current absence of normal patient data within the cBioPortal 
 More specifically, the <code>cesc_tcga</code> dataset containing data on normal patients was used.
 
 Link to the normals dataset used: <a href="https://github.com/cBioPortal/datahub/tree/master/public/cesc_tcga">LINK</a><br>
-Files related to the normals dataset should be placed within a folder called <b>Normals</b>
+Files related to the normals dataset should be placed within a folder called <code>Normals</code> in the root folder of the project
 
 
 ## Pre-Processing normals
@@ -99,25 +98,42 @@ contains a variety of parameters that are not used by the network and therefore 
     <li>Eighth step, add the columns of which genes were not found with <code>python3 add_missing_variants.py</code>.</li>
 </ul>
 
-### Config Path
-In this script there are some path that we are going to describe now:<br>
+## Main.py
+To run the program, you have to run <code>python3 main.py</code>.<br>
+However, to run the main we need some <strong>important</strong> information about how this works.
+
+### Configuration
+In this script there are settings and path that we are going to describe now:<br>
 
 #### Dataset
 <ol style="list-style-type: numbers;">
-  <li><code>dataset_path</code>: the dataset that we want to use</li>
-  <li><code>encoded_path</code>: the encoded of the dataset;</li>
+  <li><code>dataset_path</code>: path for the dataset that we want to use</li>
+  <li><code>encoded_path</code>: path for the encoded of the dataset;</li>
+  <li><code>data_encoded = False</code>: boolean flag that allows to generate the encoded of the dataset (if this is the first time you run the code leave the default value) 
+  <ul>
+      <li><code>False</code>: encoded to be generated;</li>
+      <li><code>True</code>: load an encoded;</li>
+    </ul></li>
+    <li><code>only_variant = False</code>: if you use the dataset that contains only variations in gene mutations set this on <code>True</code>;</li>
 </ol>
 
 #### Classification
 <ol style="list-style-type: numbers;">  
   <li><code>model_path</code>: where the model will be saved or uploaded;</li>
-  <li><code>risultati_classification</code>: results of the classification;</li>
+  <li><code>risultati_classification</code>: path for the results of the classification;</li>
+  <li><code>classification = True</code>: boolean flag to run the classification;</li>
+    <li><code>classification_normals = True</code>: boolean flag to run the classification on normals dataset;</li>
 </ol>
 
 #### Siamese
 <ol style="list-style-type: numbers;">  
   <li><code>siamese_path</code>: where the model of the siamese network will be saved or uploaded;</li>
-  <li><code>risultati_siamese</code>: results of the siamese network;</li>
+  <li><code>risultati_siamese</code>: path for the  results of the siamese network;</li>
+  <li><code>siamese_net = True</code>: boolean flag to run the siamese network;</li>
+    <li><code>siamese_variants = True</code>: if you use the dataset that contains the variations in gene mutations set this on <code>True</code>;</li>
+    <li><code>siamese_normals = True</code>: boolean flag to run the siamese with normals dataset;</li>
+    <li><code>normals_max_epsilon= False</code> <a href="#comparison">type of comparison range for normals</a> (gives result only if siamese_normals is True) </li>
+    <li><code>normals_param_epsilon = True</code> <a href="#comparison">type of comparison range for normals</a> (gives result only if siamese_normals is True) </li>
 </ol>
 
 #### Normals
@@ -126,27 +142,7 @@ In this script there are some path that we are going to describe now:<br>
 </ol>
 <br>
 
-### Boolean Variables
-Always in the <code>main.py</code> script you can set some variables:
-
-<ul>
-  <li><code>only_variant = False</code>: if you use the dataset that contains only variations in gene mutations set this on <code>True</code>;</li>
-  <li><code>data_encoded = False</code>: allows to generate the encoded of the dataset (if this is the first time you run the code leave the default value) 
-    <ul>
-      <li><code>False</code>: encoded to be generated;</li>
-      <li><code>True</code>: load an encoded;</li>
-    </ul>
-  </li>
-  <li><code>classification = True</code>: run the classification;</li>
-    <li><code>classification_normals = True</code>: run the classification on normals dataset;</li>
-  <li><code>siamese_net = True</code>: run the siamese network;</li>
-    <li><code>siamese_normals = True</code>: run the siamese with normals dataset;</li>
-    <li><code>normals_max_epsilon= False</code> <a href="#comparison">type of comparison range for normals</a></li>
-    <li><code>normals_param_epsilon = True</code> <a href="#comparison">type of copmarison range for normals</a></li>
-  <li><code>siamese_variants = True</code>: if you use the dataset that contains the variations in gene mutations set this on <code>True</code>;</li>
-
-</ul>
-<br>
+### Keep in mind
 
 The Siamese Network can only be launched if it has a classification model already trained and saved. In the project the classification model has already been trained. 
 If you want to use the models in this project and not start experimenting again set the parameters in this way:
