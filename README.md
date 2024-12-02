@@ -156,7 +156,6 @@ siamese_normals = False
 siamese_variants = True
 normals_max_epsilon = False
 normals_param_epsilon = False
-siamese_variants = False
 ```
 
 ## Siamese model with normal patients
