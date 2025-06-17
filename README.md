@@ -44,7 +44,7 @@ The folder contains subfolders for different functions.<br>
 <ul>
     <li>The folder <code>data_cleaning</code> which contains the files for cleaning and formatting the dataset, also contains the files for calculating normalization and standard deviation of the values;</li><br>
     <li>The <code>merged_data</code> folder that contains the files for merging the files that will make up the final dataset</li><br>
-    <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns, and the like </li>
+    <li>The <code>utils</code> folder that contains useful functions for possible necessary changes to the dataset, such as changing the csv delimiter, deleting columns </li>
 </ul>
 To pre-process the dataset correctly, it is mandatory to perform at least the following commands:
 <ul>
